@@ -6,8 +6,7 @@ interface WelcomeProps {
     statusCounts: StatusCounts
 }
 
-export const ActiveIssuesComponent: React.SFC<WelcomeProps> = (props) => {
-
+export function ActiveIssuesComponent(props: WelcomeProps) {
     if (!props.statusCounts) {
         return (
             <div className="card">
@@ -51,13 +50,16 @@ export const ActiveIssuesComponent: React.SFC<WelcomeProps> = (props) => {
                     Highest:
                     100%
                     on Oct 11, 2018
-                </p>
+    </p>
                 <p className="m-0 small text-uppercase text-muted">
                     Lowest:
                     20%
                     on Oct 9, 2018
-                </p>
+    </p>
+
             </div>
+
         </div>
+
     );
 };

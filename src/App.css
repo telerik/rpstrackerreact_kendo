@@ -164,3 +164,8 @@ overflow: scroll;
 .logo {
   width: 100px;
 }
+
+/* Kendo overrides */
+.k-animation-container-relative {
+    display: block !important;
+}
