@@ -1,18 +1,17 @@
-import { DashboardFilter, DashboardRepository, FilteredIssues } from "../../repositories/dashboard.repository";
+import { cloneElement, useContext, useState } from "react";
+import { useQueries } from "react-query";
+import { Observable } from "rxjs";
+
+import { DashboardFilter, FilteredIssues } from "../../repositories/dashboard.repository";
 import { formatDateEnUs } from "../../../../core/helpers/date-utils";
 import { ActiveIssuesComponent } from "../../components/active-issues/active-issues";
-import { DashboardService } from "../../services/dashboard.service";
 import { StatusCounts } from "../../models";
-import { cloneElement, useState } from "react";
-import { useQueries, useQuery } from "react-query";
+import { PtUser } from "../../../../core/models/domain";
+import { PtDashboardServiceContext, PtStoreContext, PtUserServiceContext } from "../../../../App";
+import { DashboardChart } from "../../components/active-issues/dashboard-chart";
 
 import { Button, ButtonGroup } from '@progress/kendo-react-buttons';
 import { ComboBox, ComboBoxChangeEvent } from '@progress/kendo-react-dropdowns';
-import { Store } from "../../../../core/state/app-store";
-import { PtUserService } from "../../../../core/services/pt-user-service";
-import { Observable } from "rxjs";
-import { PtUser } from "../../../../core/models/domain";
-import { DashboardChart } from "../../components/active-issues/dashboard-chart";
 
 
 type DateRange = {
@@ -20,15 +19,10 @@ type DateRange = {
     dateEnd: Date;
 };
 
-const store: Store = new Store();
-const dashboardRepo: DashboardRepository = new DashboardRepository();
-const dashboardService: DashboardService = new DashboardService(dashboardRepo);
-const ptUserService: PtUserService = new PtUserService(store);
-
-type GetStatusCountsParamsType= Parameters<typeof dashboardService.getStatusCounts>;
-type GetFilteredIssuesParamsType= Parameters<typeof dashboardService.getFilteredIssues>;
-
 export function DashboardPage() {
+    const store = useContext(PtStoreContext);
+    const userService = useContext(PtUserServiceContext);
+    const dashboardService = useContext(PtDashboardServiceContext);
 
     const [filter, setFilter] = useState<DashboardFilter>({});
 
@@ -39,9 +33,7 @@ export function DashboardPage() {
         return [keybase, filter];
     }
 
-
     const useDashboardData = (filter: DashboardFilter) => {
-
         return useQueries<[StatusCounts, FilteredIssues]>([
             {
                 queryKey: getQueryKey('items'),
@@ -52,7 +44,6 @@ export function DashboardPage() {
                 queryFn: () => dashboardService.getFilteredIssues(filter)
             }
         ]);
-
     };
 
     const queryResults = useDashboardData(filter);
@@ -88,7 +79,7 @@ export function DashboardPage() {
             }
         });
 
-        ptUserService.fetchUsers();
+        userService.fetchUsers();
     }
 
     function filterItemRender(li: any, itemProps: any) {
