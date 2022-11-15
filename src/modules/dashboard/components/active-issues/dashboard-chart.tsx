@@ -34,10 +34,10 @@ export function DashboardChart(props: DashboardChartProps) {
     const categories = initCategories();
     const itemsOpenedByMonth = initItemsOpenedByMonth();
     const itemsClosedByMonth = initItemsClosedByMonth();
-    
+
     return (
 
-        <Chart>
+        <Chart transitions={false}>
             <ChartTitle text="Active Issues" />
 
             <ChartSeriesDefaults type="column" stack={true} gap={0.06} />
