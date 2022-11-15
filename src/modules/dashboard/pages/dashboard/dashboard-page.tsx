@@ -1,6 +1,7 @@
 import { cloneElement, useContext, useState } from "react";
 import { useQueries } from "react-query";
 import { Observable } from "rxjs";
+import { Typography } from "@progress/kendo-react-common";
 
 import {
   DashboardFilter,
@@ -122,10 +123,10 @@ export function DashboardPage() {
     <div className="dashboard">
       <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
         <div className="col-md order-md-first text-center text-md-left">
-          <h2>
-            <span className="small text-uppercase text-muted d-block">
+          <div >
+            <Typography.h2 className="small text-uppercase text-muted mb-0">
               Statistics
-            </span>
+            </Typography.h2>
             {filter.dateStart && filter.dateEnd && (
               <span>
                 {" "}
@@ -133,7 +134,7 @@ export function DashboardPage() {
                 {formatDateEnUs(filter.dateEnd)}
               </span>
             )}
-          </h2>
+          </div>
         </div>
 
         <div className="btn-toolbar mb-2 mb-md-0" style={{ gap: 20 }}>
@@ -175,13 +176,13 @@ export function DashboardPage() {
       </div>
 
       <div className="card">
-        <h3 className="card-header">Active Issues</h3>
+        <Typography.h3 className="card-header">Active Issues</Typography.h3>
         <div className="card-block pt-2">
           <ActiveIssuesComponent statusCounts={statusCounts} />
           <div className="container">
             <div className="row">
               <div className="col-sm-12">
-                <h3>All issues</h3>
+                <Typography.h3>All issues</Typography.h3>
               </div>
             </div>
           </div>

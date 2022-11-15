@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { Typography } from '@progress/kendo-react-common';
 
 import './backlog-page.css';
 
@@ -82,7 +83,7 @@ export function BacklogPage() {
     return (
         <React.Fragment>
             <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
-                <h1 className="h2">Backlog</h1>
+                <Typography.h2>Backlog</Typography.h2>
                 <div className="btn-toolbar mb-2 mb-md-0">
                     <AppPresetFilter selectedPreset={currentPreset} onSelectPresetTap={onSelectPresetTap} />
 

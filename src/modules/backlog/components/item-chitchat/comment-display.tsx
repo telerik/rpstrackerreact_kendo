@@ -1,3 +1,4 @@
+import { Typography } from '@progress/kendo-react-common';
 import { PtComment } from "../../../../core/models/domain";
 
 export type PtCommentDisplayComponentProps = {
@@ -13,7 +14,7 @@ export function PtCommentDisplayComponent(props: PtCommentDisplayComponentProps)
         <li key={comment.id} className="media chitchat-item">
             <img src={comment.user!.avatar} className="mr-3 li-avatar rounded" />
             <div className="media-body">
-                <h6 className="mt-0 mb-1"><span>{comment.user!.fullName}</span><span className="li-date">{dateStr}</span></h6>
+                <Typography.h6 className="mt-0 mb-1"><span>{comment.user!.fullName}</span><span className="li-date">{dateStr}</span></Typography.h6>
                 <span className="chitchat-text ">{comment.title}</span>
             </div>
         </li>

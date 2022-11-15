@@ -1,4 +1,5 @@
 import { Modal, ModalBody, ModalFooter } from "reactstrap";
+import { Typography } from "@progress/kendo-react-common";
 import { PtItem, PtUser } from "../../../../core/models/domain";
 import { PtNewItem } from "../../../../shared/models/dto/pt-new-item";
 
@@ -17,7 +18,7 @@ export function AssigneeListModal(props: AssigneeListModalProps) {
     return (
         <Modal isOpen={modalIsShowing}>
             <div className="modal-header">
-                <h4 className="modal-title" id="modal-basic-title">Select Assignee</h4>
+                <Typography.h4 className="modal-title" id="modal-basic-title">Select Assignee</Typography.h4>
                 <button type="button" className="close" onClick={() => setModalIsShowing(false)} aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

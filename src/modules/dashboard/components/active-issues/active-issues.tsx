@@ -1,4 +1,5 @@
 import React from "react";
+import { Typography } from '@progress/kendo-react-common';
 import { StatusCounts } from "../../models";
 import "./active-issues.css";
 
@@ -10,7 +11,7 @@ export function ActiveIssuesComponent(props: WelcomeProps) {
   if (!props.statusCounts) {
     return (
       <div className="card">
-        <h3 className="card-header">Active Issues</h3>
+        <Typography.h3 className="card-header">Active Issues</Typography.h3>
         <div className="card-block"></div>
       </div>
     );
