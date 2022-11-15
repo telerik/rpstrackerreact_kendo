@@ -111,14 +111,6 @@ export function DashboardPage() {
     }
   }
 
-  if (queryResult0.isLoading || queryResult1.isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (!statusCounts || !filteredIssues) {
-    return <div>No data</div>;
-  }
-
   return (
     <div className="dashboard">
       <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
@@ -188,7 +180,7 @@ export function DashboardPage() {
           </div>
           <div className="row">
             <div className="col-sm-12">
-              <DashboardChart issuesAll={filteredIssues} />
+              {filteredIssues && <DashboardChart issuesAll={filteredIssues} />}
             </div>
           </div>
         </div>
