@@ -1,4 +1,5 @@
 import { PtTask } from "../../../../core/models/domain";
+import { Button } from '@progress/kendo-react-buttons';
 
 export type PtTaskDisplayComponentProps = {
     task: PtTask;
@@ -48,7 +49,7 @@ export function PtTaskDisplayComponent(props: PtTaskDisplayComponentProps) {
                 type="text" className="form-control" aria-label="Text input with checkbox" name={'tasktitle' + task.id} />
 
             <div className="input-group-append">
-                <button className="btn btn-danger" type="button" onClick={deleteTapped}>Delete</button>
+                <Button type="button" onClick={deleteTapped} themeColor="error" style={{borderTopLeftRadius: 0, borderBottomLeftRadius: 0}}>Delete</Button>
             </div>
         </div>
     );

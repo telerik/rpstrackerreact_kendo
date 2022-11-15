@@ -2,6 +2,7 @@ import { Modal, ModalBody, ModalFooter } from "reactstrap";
 import { Typography } from "@progress/kendo-react-common";
 import { PtItem, PtUser } from "../../../../core/models/domain";
 import { PtNewItem } from "../../../../shared/models/dto/pt-new-item";
+import { Button } from "@progress/kendo-react-buttons";
 
 export type AssigneeListModalProps = {
     modalIsShowing: boolean;
@@ -19,9 +20,9 @@ export function AssigneeListModal(props: AssigneeListModalProps) {
         <Modal isOpen={modalIsShowing}>
             <div className="modal-header">
                 <Typography.h4 className="modal-title" id="modal-basic-title">Select Assignee</Typography.h4>
-                <button type="button" className="close" onClick={() => setModalIsShowing(false)} aria-label="Close">
+                <Button fillMode={"flat"} type="button" onClick={() => setModalIsShowing(false)} aria-label="Close">
                     <span aria-hidden="true">&times;</span>
-                </button>
+                </Button>
             </div>
             <ModalBody>
                 <ul className="list-group list-group-flush">

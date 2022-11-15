@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Typography } from '@progress/kendo-react-common';
-import { Button, Modal, ModalBody, ModalFooter } from "reactstrap";
+import { Button } from '@progress/kendo-react-buttons';
+import { Modal, ModalBody, ModalFooter } from "reactstrap";
 import { ItemType } from "../../../../core/constants";
 import { EMPTY_STRING } from "../../../../core/helpers";
 import { PtItem } from "../../../../core/models/domain";
@@ -45,9 +46,9 @@ export function AddItemModal(props: AddItemModalProps) {
         <Modal isOpen={modalShowing}>
             <div className="modal-header">
                 <Typography.h4 className="modal-title" id="modal-basic-title">Add New Item</Typography.h4>
-                <button type="button" className="close" onClick={()=>setShowModal(false)} aria-label="Close">
+                <Button fillMode={"flat"} type="button" onClick={()=>setShowModal(false)} aria-label="Close">
                     <span aria-hidden="true">&times;</span>
-                </button>
+                </Button>
             </div>
             <ModalBody>
                 <form>

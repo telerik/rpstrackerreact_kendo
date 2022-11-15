@@ -13,6 +13,7 @@ import { AddItemModal } from "../../components/add-item-modal/add-item-modal";
 import { BacklogList } from "../../components/backlog-list/backlog-list";
 import { PtBacklogServiceContext, PtStoreContext } from "../../../../App";
 import { BacklogGrid } from "../../components/backlog-grid/backlog-grid";
+import { Button, ButtonGroup } from "@progress/kendo-react-buttons";
 
 
 export function BacklogPage() {
@@ -87,9 +88,9 @@ export function BacklogPage() {
                 <div className="btn-toolbar mb-2 mb-md-0">
                     <AppPresetFilter selectedPreset={currentPreset} onSelectPresetTap={onSelectPresetTap} />
 
-                    <div className="btn-group mr-2">
-                        <button type="button" className="btn btn-sm btn-outline-secondary" onClick={toggleModal}>Add</button>
-                    </div>
+                    <ButtonGroup className="mr-2">
+                        <Button type="button" size="small" fillMode="outline" themeColor="secondary" onClick={toggleModal}>Add</Button>
+                    </ButtonGroup>
                 </div>
             </div>
 

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Button } from '@progress/kendo-react-buttons';
 import { EMPTY_STRING } from "../../../../core/helpers";
 
 export type TaskFormProps = {
@@ -34,7 +35,7 @@ export function NewTaskForm(props: TaskFormProps) {
                     <input value={newTaskTitle} onChange={onNewTaskTitleChanged} placeholder="Enter new task..." className="form-control pt-text-task-add"
                         name="newTask" />
                 </div>
-                <button type="button" onClick={() => onAddTapped()} className="btn btn-primary" disabled={!newTaskTitle}>Add</button>
+                <Button type="button" onClick={() => onAddTapped()} themeColor="primary" disabled={!newTaskTitle}>Add</Button>
             </div>
         </form>
     );
