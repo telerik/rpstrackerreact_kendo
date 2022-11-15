@@ -1,6 +1,11 @@
 import { useState } from "react";
 import { Typography } from '@progress/kendo-react-common';
 import { Button } from '@progress/kendo-react-buttons';
+import { FormElement } from '@progress/kendo-react-form';
+import { Label } from '@progress/kendo-react-labels';
+import { Input, TextArea } from '@progress/kendo-react-inputs';
+import { DropDownList } from '@progress/kendo-react-dropdowns';
+import { PopupPropsContext } from '@progress/kendo-react-popup';
 import { Modal, ModalBody, ModalFooter } from "reactstrap";
 import { ItemType } from "../../../../core/constants";
 import { EMPTY_STRING } from "../../../../core/helpers";
@@ -51,43 +56,32 @@ export function AddItemModal(props: AddItemModalProps) {
                 </Button>
             </div>
             <ModalBody>
-                <form>
-                    <div className="form-group row">
-                        <label className="col-sm-2 col-form-label">Title</label>
-                        <div className="col-sm-10">
-                            <input className="form-control" defaultValue={newItem.title} onChange={(e) => onFieldChange(e, 'title')} name="title" />
+                <FormElement horizontal={true}>
+                    <div className="k-form-field">
+                        <Label>Title</Label>
+                        <div className="k-form-field-wrap">
+                            <Input defaultValue={newItem.title} onChange={(e) => onFieldChange(e, 'title')} name="title" />
                         </div>
                     </div>
-
-                    <div className="form-group row">
-                        <label className="col-sm-2 col-form-label">Description</label>
-                        <div className="col-sm-10">
-                            <textarea className="form-control" defaultValue={newItem.description} onChange={(e) => onFieldChange(e, 'description')} name="description"></textarea>
+                    <div className="k-form-field">
+                        <Label>Description</Label>
+                        <div className="k-form-field-wrap">
+                            <TextArea rows={2} defaultValue={newItem.description} onChange={(e) => onFieldChange(e, 'description')} name="description" />
                         </div>
                     </div>
-
-                    <div className="form-group row">
-                        <label className="col-sm-2 col-form-label">Item Type</label>
-                        <div className="col-sm-10">
-                            <select className="form-control" defaultValue={newItem.typeStr} onChange={(e) => onFieldChange(e, 'typeStr')} name="itemType">
-                                {
-                                    itemTypesProvider.map(t => {
-                                        return (
-                                            <option key={t} value={t}>
-                                                {t}
-                                            </option>
-                                        )
-                                    })
-                                }
-                            </select>
+                    <div className="k-form-field">
+                        <Label>Type</Label>
+                        <div className="k-form-field-wrap">
+                            <PopupPropsContext.Provider value={(p) => ({...p, style: { ...(p.style || {}), zIndex: 1130 }})} >
+                                <DropDownList defaultValue={newItem.typeStr} data={itemTypesProvider} name="typeStr" onChange={(e) => onFieldChange(e, 'typeStr')}/>
+                            </PopupPropsContext.Provider>
                         </div>
                     </div>
-
-                </form >
+                </FormElement>
             </ModalBody >
             <ModalFooter>
-                <Button color="secondary" onClick={()=>setShowModal(false)}>Cancel</Button>
-                <Button color="primary" onClick={onAddSave}>Save</Button>{' '}
+                <Button themeColor="secondary" onClick={()=>setShowModal(false)}>Cancel</Button>
+                <Button themeColor="primary" onClick={onAddSave}>Save</Button>{' '}
             </ModalFooter>
         </Modal >
     );
