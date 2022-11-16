@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { Typography } from '@progress/kendo-react-common';
 
 import './backlog-page.css';
 
@@ -12,6 +13,7 @@ import { AddItemModal } from "../../components/add-item-modal/add-item-modal";
 import { BacklogList } from "../../components/backlog-list/backlog-list";
 import { PtBacklogServiceContext, PtStoreContext } from "../../../../App";
 import { BacklogGrid } from "../../components/backlog-grid/backlog-grid";
+import { Button, ButtonGroup } from "@progress/kendo-react-buttons";
 
 
 export function BacklogPage() {
@@ -82,13 +84,13 @@ export function BacklogPage() {
     return (
         <React.Fragment>
             <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
-                <h1 className="h2">Backlog</h1>
+                <Typography.h2>Backlog</Typography.h2>
                 <div className="btn-toolbar mb-2 mb-md-0">
                     <AppPresetFilter selectedPreset={currentPreset} onSelectPresetTap={onSelectPresetTap} />
 
-                    <div className="btn-group mr-2">
-                        <button type="button" className="btn btn-sm btn-outline-secondary" onClick={toggleModal}>Add</button>
-                    </div>
+                    <ButtonGroup className="mr-2">
+                        <Button type="button" size="small" fillMode="outline" themeColor="secondary" onClick={toggleModal}>Add</Button>
+                    </ButtonGroup>
                 </div>
             </div>
 

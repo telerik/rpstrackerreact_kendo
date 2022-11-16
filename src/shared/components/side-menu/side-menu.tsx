@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { Typography } from '@progress/kendo-react-common';
 
 export function SideMenu() {
     return (
@@ -73,7 +74,7 @@ export function SideMenu() {
 
                 </ul>
 
-                <h6 className="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                <Typography.h6 className="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
                     <span>Saved reports</span>
                     <Link className="d-flex align-items-center text-muted" to="#">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -83,7 +84,7 @@ export function SideMenu() {
                             <line x1="8" y1="12" x2="16" y2="12"></line>
                         </svg>
                     </Link>
-                </h6>
+                </Typography.h6>
                 <ul className="nav flex-column mb-2">
                     <li className="nav-item">
                         <Link className="nav-link" to="#">

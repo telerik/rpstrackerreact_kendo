@@ -11,6 +11,7 @@ import { ItemType, PT_ITEM_STATUSES, PT_ITEM_PRIORITIES } from "../../../../core
 
 import { AssigneeListModal } from "../assignee-list-modal/assignee-list-modal";
 import { getIndicatorClass } from "../../../../shared/helpers/priority-styling";
+import { Button } from "@progress/kendo-react-buttons";
 
 interface PtItemDetailsComponentProps {
     item: PtItem;
@@ -166,7 +167,7 @@ export function PtItemDetailsComponent(props: PtItemDetailsComponentProps) {
                         <img src={selectedAssignee!.avatar} className="li-avatar rounded" />
                         <span>{itemForm.assigneeName}</span>
 
-                        <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => assigneePickerOpen()}>Pick assignee</button>
+                        <Button type="button" fillMode="outline" themeColor="secondary" onClick={() => assigneePickerOpen()}>Pick assignee</Button>
                     </div>
                 </div>
             </form>

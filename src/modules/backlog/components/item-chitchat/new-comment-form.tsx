@@ -1,3 +1,4 @@
+import { Button } from "@progress/kendo-react-buttons";
 import { useState } from "react";
 import { EMPTY_STRING } from "../../../../core/helpers";
 import { PtUser } from "../../../../core/models/domain";
@@ -39,7 +40,7 @@ export function NewCommentForm(props: CommentFormProps) {
                     <textarea value={newCommentText} onChange={onNewCommentChanged} placeholder="Enter new comment..." className="form-control pt-text-comment-add"
                         name="newComment"></textarea>
                 </div>
-                <button type="button" onClick={onAddTapped} className="btn btn-primary" disabled={!newCommentText}>Add</button>
+                <Button type="button" onClick={onAddTapped} themeColor="primary" disabled={!newCommentText}>Add</Button>
             </div>
         </form >
     );
