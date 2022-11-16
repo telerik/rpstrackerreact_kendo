@@ -2,6 +2,7 @@ import { Chart, ChartCategoryAxis, ChartCategoryAxisItem, ChartSeries, ChartSeri
 import { FilteredIssues } from "../../repositories/dashboard.repository";
 
 import 'hammerjs';
+import { useMemo } from "react";
 
 export type DashboardChartProps = {
     issuesAll: FilteredIssues;
@@ -11,6 +12,7 @@ export type DashboardChartProps = {
 export function DashboardChart(props: DashboardChartProps) {
 
     function initCategories() {
+        console.log('initCategories');
         const cats = props.issuesAll.categories ? props.issuesAll.categories.map(c => new Date(c)) : [];
         return cats;
     }
@@ -31,9 +33,17 @@ export function DashboardChart(props: DashboardChartProps) {
         return itemsClosedByMonth;
     }
 
-    const categories = initCategories();
-    const itemsOpenedByMonth = initItemsOpenedByMonth();
-    const itemsClosedByMonth = initItemsClosedByMonth();
+    const categories = useMemo(() => {
+        return initCategories();
+    },[props.issuesAll.categories]);
+
+    const itemsOpenedByMonth = useMemo(() => {
+        return initItemsOpenedByMonth();
+    },[props.issuesAll.items]);
+
+    const itemsClosedByMonth = useMemo(() => {
+        return initItemsClosedByMonth();
+    },[props.issuesAll.items]);
 
     return (
 
