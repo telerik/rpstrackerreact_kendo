@@ -17,6 +17,7 @@ import { PtNewComment } from "../../../../shared/models/dto/pt-new-comment";
 import { PtBacklogServiceContext, PtStoreContext, PtUserServiceContext } from "../../../../App";
 
 import { TabStrip, TabStripTab } from '@progress/kendo-react-layout';
+import { PtItemScheduleComponent } from "../../components/item-schedule/pt-item-schedule";
 
 
 const queryTag = 'item';
@@ -24,10 +25,12 @@ const queryTag = 'item';
 const screenPositionMap: { [key in DetailScreenType | number]: number | DetailScreenType } = {
     0: 'details',
     1: 'tasks',
-    2: 'chitchat',
+    2: 'schedule',
+    3: 'chitchat',
     'details': 0,
     'tasks': 1,
-    'chitchat': 2
+    'schedule': 2,
+    'chitchat': 3
 };
 
 export function DetailPage() {
@@ -193,6 +196,14 @@ export function DetailPage() {
                         deleteTaskMutation={deleteTaskMutation}
                         toggleTaskCompletionMutation={toggleTaskCompletionMutation}
                         updateTaskMutation={updateTaskMutation} />
+                </TabStripTab>
+                <TabStripTab title="Schedule">
+                    <PtItemScheduleComponent 
+                        tasks={item.tasks} 
+                        addTaskMutation={addTaskMutation} 
+                        deleteTaskMutation={deleteTaskMutation}
+                        updateTaskMutation={updateTaskMutation}
+                        />
                 </TabStripTab>
                 <TabStripTab title="Chitchat">
                     <PtItemChitchatComponent 
