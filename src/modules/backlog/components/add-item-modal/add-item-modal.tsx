@@ -51,13 +51,13 @@ export function AddItemModal(props: AddItemModalProps) {
                 <div className="k-form-field">
                     <Label>Title</Label>
                     <div className="k-form-field-wrap">
-                        <Input defaultValue={newItem.title} onChange={(e) => onFieldChange(e, 'title')} name="title" />
+                        <Input defaultValue={newItem.title} placeholder={'Enter title...'} onChange={(e) => onFieldChange(e, 'title')} name="title" />
                     </div>
                 </div>
                 <div className="k-form-field">
                     <Label>Description</Label>
                     <div className="k-form-field-wrap">
-                        <TextArea rows={2} defaultValue={newItem.description} onChange={(e) => onFieldChange(e, 'description')} name="description" />
+                        <TextArea rows={2} defaultValue={newItem.description} placeholder={'Enter description...'} onChange={(e) => onFieldChange(e, 'description')} name="description" />
                     </div>
                 </div>
                 <div className="k-form-field">
