@@ -1,8 +1,16 @@
 import { PtTask } from '../../../core/models/domain';
 
-export interface PtTaskUpdate {
+type PtTaskCommonUpdate = {
     task: PtTask;
-    toggle: boolean;
-    newTitle?: string;
-    delete?: boolean;
-}
+};
+
+export type PtTaskTitleUpdate = PtTaskCommonUpdate & {
+    newTitle: string;
+};
+
+export type PtTaskDatesUpdate = PtTaskCommonUpdate & {
+    dateStart: Date;
+    dateEnd: Date;
+};
+
+export type PtTaskAllUpdate = PtTaskCommonUpdate & PtTaskTitleUpdate & PtTaskDatesUpdate;

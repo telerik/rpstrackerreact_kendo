@@ -1,25 +1,17 @@
-import React, { ReactNode } from "react";
+import { ButtonGroup, Button } from "@progress/kendo-react-buttons";
+
 import { PresetType } from "../../../core/models/domain/types";
-
-
-interface AppPresetFilterProps {
-    selectedPreset: PresetType;
-    onSelectPresetTap: (preset: PresetType) => void;
-}
-
-export class AppPresetFilter extends React.PureComponent<AppPresetFilterProps, any> {
-
-    constructor(props: AppPresetFilterProps) {
-        super(props);
-    }
-
-    public render() {
-        return (
-            <div className="btn-group mr-2">
-                <button type="button" className="btn btn-sm btn-outline-secondary" onClick={(e) => this.props.onSelectPresetTap('my')}>My Items</button>
-                <button type="button" className="btn btn-sm btn-outline-secondary" onClick={(e) => this.props.onSelectPresetTap('open')} > Open Items</button >
-                <button type="button" className="btn btn-sm btn-outline-secondary" onClick={(e) => this.props.onSelectPresetTap('closed')} > Done Items</button >
-            </div >
-        );
-    }
+type AppPresetFilterProps = {
+  selectedPreset: PresetType;
+  onSelectPresetTap: (preset: PresetType) => void;
 };
+
+export function AppPresetFilter(props: AppPresetFilterProps) {
+  return (
+    <ButtonGroup className="mr-2">
+      <Button type="button" togglable={true} selected={props.selectedPreset === "my"} fillMode="outline" size="small" themeColor="secondary" onClick={() => props.onSelectPresetTap("my")}>My Items</Button>
+      <Button type="button" togglable={true} selected={props.selectedPreset === "open"} fillMode="outline" size="small" themeColor="secondary" onClick={() => props.onSelectPresetTap("open")}>Open Items</Button>
+      <Button type="button" togglable={true} selected={props.selectedPreset === "closed"} fillMode="outline" size="small" themeColor="secondary" onClick={() => props.onSelectPresetTap("closed")}>Closed Items</Button>
+    </ButtonGroup>
+  );
+}

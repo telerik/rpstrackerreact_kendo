@@ -1,17 +1,17 @@
-import React from "react";
-import { Observable } from "rxjs";
-import { Modal, ModalBody, ModalFooter } from "reactstrap";
-import { Input } from '@progress/kendo-react-inputs';
+import React, { useEffect, useState } from "react";
 
+import { Observable } from "rxjs";
+
+import { Input,  Slider, TextArea } from '@progress/kendo-react-inputs';
 import { DropDownList, ListItemProps } from '@progress/kendo-react-dropdowns';
 
 import { PtItem, PtUser } from "../../../../core/models/domain";
 import { PtItemDetailsEditFormModel, ptItemToFormModel } from "../../../../shared/models/forms/pt-item-details-edit-form";
 import { ItemType, PT_ITEM_STATUSES, PT_ITEM_PRIORITIES } from "../../../../core/constants";
-import { PriorityEnum } from "../../../../core/models/domain/enums";
+
+import { AssigneeListModal } from "../assignee-list-modal/assignee-list-modal";
 import { getIndicatorClass } from "../../../../shared/helpers/priority-styling";
-
-
+import { Button } from "@progress/kendo-react-buttons";
 
 interface PtItemDetailsComponentProps {
     item: PtItem;
@@ -20,55 +20,46 @@ interface PtItemDetailsComponentProps {
     users$: Observable<PtUser[]>;
 }
 
-interface PtItemDetailsComponentState {
-    showAddModal: boolean;
-    users: PtUser[];
-}
+export function PtItemDetailsComponent(props: PtItemDetailsComponentProps) {
 
-export class PtItemDetailsComponent extends React.Component<PtItemDetailsComponentProps, PtItemDetailsComponentState> {
+    const statusesProvider = PT_ITEM_STATUSES;
+    const prioritiesProvider = PT_ITEM_PRIORITIES;
+    const itemTypesProvider = ItemType.List.map((t) => t.PtItemType);
 
-    private itemForm: PtItemDetailsEditFormModel | undefined;
-    public itemTypesProvider = ItemType.List.map((t) => t.PtItemType);
-    public statusesProvider = PT_ITEM_STATUSES;
-    public prioritiesProvider = PT_ITEM_PRIORITIES;
-    private selectedAssignee: PtUser | undefined;
+    const [itemForm, setItemForm] = useState(ptItemToFormModel(props.item));
+    const [users, setUsers] = useState<PtUser[]>([]);
+    const [modalIsShowing, setModalIsShowing] = useState(false);
+    const [selectedAssignee, setSelectedAssignee] = useState<PtUser>(props.item.assignee);
+    useEffect(()=>{
+        notifyUpdateItem();
+    }, [selectedAssignee]);
 
-    constructor(props: any) {
-        super(props);
-
-        this.itemForm = ptItemToFormModel(this.props.item);
-        this.state = {
-            showAddModal: false,
-            users: []
-        };
-        this.selectedAssignee = this.props.item.assignee;
-    }
-
-    public onFieldChange(e: any, formFieldName: string) {
-        if (!this.itemForm) {
+    
+    function onFieldChange(e: any, formFieldName: string) {
+        if (!itemForm) {
             return;
         }
-        (this.itemForm as any)[formFieldName] = e.target.value;
+        (itemForm as any)[formFieldName] = e.target.value;
     }
 
-    public onNonTextFieldChange(e: any, formFieldName: string) {
-        this.onFieldChange(e, formFieldName);
-        this.notifyUpdateItem();
+    function onNonTextFieldChange(e: any, formFieldName: string) {
+        onFieldChange(e, formFieldName);
+        notifyUpdateItem();
     }
 
-    public onBlurTextField() {
-        this.notifyUpdateItem();
+    function onBlurTextField() {
+        notifyUpdateItem();
     }
 
-    private notifyUpdateItem() {
-        if (!this.itemForm) {
+    function notifyUpdateItem() {
+        if (!itemForm) {
             return;
         }
-        const updatedItem = this.getUpdatedItem(this.props.item, this.itemForm, this.selectedAssignee!);
-        this.props.itemSaved(updatedItem);
+        const updatedItem = getUpdatedItem(props.item, itemForm, selectedAssignee!);
+        props.itemSaved(updatedItem);
     }
 
-    private getUpdatedItem(item: PtItem, itemForm: PtItemDetailsEditFormModel, assignee: PtUser): PtItem {
+    function getUpdatedItem(item: PtItem, itemForm: PtItemDetailsEditFormModel, assignee: PtUser): PtItem {
         const updatedItem = Object.assign({}, item, {
             title: itemForm.title,
             description: itemForm.description,
@@ -81,36 +72,25 @@ export class PtItemDetailsComponent extends React.Component<PtItemDetailsCompone
         return updatedItem;
     }
 
-    public assigneePickerOpen() {
-        this.props.users$.subscribe((users: PtUser[]) => {
+    function assigneePickerOpen() {
+        props.users$.subscribe((users: PtUser[]) => {
             if (users.length > 0) {
-                this.setState({
-                    users: users,
-                    showAddModal: true
-                });
+                setUsers(users);
+                setModalIsShowing(true);
             }
         });
 
-        this.props.usersRequested();
+        props.usersRequested();
     }
 
-    private toggleModal() {
-        this.setState({
-            showAddModal: !this.state.showAddModal
-        });
-        return false;
+    function selectAssignee(u: PtUser) {
+        setSelectedAssignee(u);
+        setItemForm({ ...itemForm, assigneeName: u.fullName });
+        setModalIsShowing(false);
+        notifyUpdateItem();
     }
 
-    private selectAssignee(u: PtUser) {
-        this.selectedAssignee = u;
-        this.itemForm!.assigneeName = u.fullName;
-        this.setState({
-            showAddModal: false,
-        });
-        this.notifyUpdateItem();
-    }
-
-    private itemTypeRender(li: any, itemProps: any) {
+    function itemTypeRender(li: any, itemProps: any) {
         const dataItem = itemProps.dataItem;
         const itemTypeRow = (
             <React.Fragment>
@@ -121,7 +101,7 @@ export class PtItemDetailsComponent extends React.Component<PtItemDetailsCompone
         return React.cloneElement(li, li.props, itemTypeRow);
     }
 
-    private priorityRender(li: any, itemProps: ListItemProps) {
+    function priorityRender(li: any, itemProps: ListItemProps) {
         const dataItem = itemProps.dataItem;
         const priorityRow = (
             <span className={'badge ' + getIndicatorClass(dataItem)}>{dataItem}</span>
@@ -129,103 +109,77 @@ export class PtItemDetailsComponent extends React.Component<PtItemDetailsCompone
         return React.cloneElement(li, li.props, priorityRow);
     }
 
-    public render() {
-        if (!this.itemForm) {
-            return null;
-        }
-        const itemForm = this.itemForm;
-        return (
-            <React.Fragment>
-                <form>
-                    <div className="form-group row">
-                        <label className="col-sm-2 col-form-label">Title</label>
-                        <div className="col-sm-10">
-
-                            <Input label="Title" defaultValue={itemForm.title} onBlur={() => this.onBlurTextField()} onChange={(e) => this.onFieldChange(e, 'title')} name="title" style={{ width: '60%' }} />
-
-                        </div>
-                    </div>
-
-                    <div className="form-group row">
-                        <label className="col-sm-2 col-form-label">Description</label>
-                        <div className="col-sm-10">
-                            <Input label="Description" multiple={true} defaultValue={itemForm.description} onBlur={() => this.onBlurTextField()} onChange={(e) => this.onFieldChange(e, 'description')} name="description" style={{ width: '60%', height: 100 }} />
-                        </div>
-                    </div>
-
-                    <div className="form-group row">
-                        <label className="col-sm-2 col-form-label">Item Type</label>
-                        <div className="col-sm-10">
-
-                            <DropDownList data={this.itemTypesProvider} itemRender={this.itemTypeRender} defaultValue={itemForm.typeStr} onChange={(e) => this.onNonTextFieldChange(e, 'typeStr')} name="itemType" />
-
-                        </div>
-                    </div>
-
-                    <div className="form-group row">
-                        <label className="col-sm-2 col-form-label">Status</label>
-                        <div className="col-sm-10">
-
-                            <DropDownList data={this.statusesProvider} defaultValue={itemForm.statusStr} onChange={(e) => this.onNonTextFieldChange(e, 'statusStr')} name="status" />
-
-                        </div>
-                    </div>
-
-                    <div className="form-group row">
-                        <label className="col-sm-2 col-form-label">Estimate</label>
-                        <div className="col-sm-10">
-                            <input className="form-control" type="range" step="1" min="0" max="20" value={itemForm.estimate} onChange={(e) => this.onNonTextFieldChange(e, 'estimate')} name="estimate" style={{ width: 300 }} />
-                        </div>
-                    </div>
-
-                    <div className="form-group row">
-                        <label className="col-sm-2 col-form-label">Priority</label>
-                        <div className="col-sm-10">
-
-                            <DropDownList data={this.prioritiesProvider} itemRender={(li, props) => this.priorityRender(li, props)} defaultValue={itemForm.priorityStr} onChange={(e) => this.onNonTextFieldChange(e, 'priorityStr')} name="priority" />
-
-                        </div>
-                    </div>
-
-                    <div className="form-group row">
-                        <label className="col-sm-2 col-form-label">Assignee</label>
-
-                        <div className="col-sm-10">
-                            <img src={this.selectedAssignee!.avatar} className="li-avatar rounded" />
-                            <span>{itemForm.assigneeName}</span>
-
-                            <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => this.assigneePickerOpen()}>Pick assignee</button>
-                        </div>
-                    </div>
-                </form>
-
-                <Modal isOpen={this.state.showAddModal} toggle={() => this.toggleModal()}>
-                    <div className="modal-header">
-                        <h4 className="modal-title" id="modal-basic-title">Select Assignee</h4>
-                        <button type="button" className="close" onClick={() => this.toggleModal()} aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <ModalBody>
-                        <ul className="list-group list-group-flush">
-                            {
-                                this.state.users.map((u: PtUser) => {
-                                    return (
-                                        <li key={u.id} className="list-group-item d-flex justify-content-between align-items-center" onClick={() => this.selectAssignee(u)}>
-                                            <span>{u.fullName}</span>
-                                            <span className="badge ">
-                                                <img src={u.avatar} className="li-avatar rounded mx-auto d-block" />
-                                            </span>
-                                        </li>
-                                    );
-                                })
-                            }
-                        </ul>
-                    </ModalBody >
-                    <ModalFooter />
-                </Modal >
-
-            </React.Fragment>
-        );
+    if (!itemForm) {
+        return null;
     }
+
+    return (
+        <React.Fragment>
+            <form>
+                <div className="form-group row">
+                    <label className="col-sm-2 col-form-label">Title</label>
+                    <div className="col-sm-10">
+                        <Input defaultValue={itemForm.title} onBlur={() => onBlurTextField()} onChange={(e) => onFieldChange(e, 'title')} name="title" style={{ width: '60%' }} />
+                    </div>
+                </div>
+
+                <div className="form-group row">
+                    <label className="col-sm-2 col-form-label">Description</label>
+                    <div className="col-sm-10">
+                        <TextArea defaultValue={itemForm.description} onBlur={() => onBlurTextField()} onChange={(e) => onFieldChange(e, 'description')} name="description" style={{ width: '60%', height: 100 }} />
+                    </div>
+                </div>
+
+                <div className="form-group row">
+                    <label className="col-sm-2 col-form-label">Item Type</label>
+                    <div className="col-sm-10">
+                        <DropDownList data={itemTypesProvider} itemRender={itemTypeRender} defaultValue={itemForm.typeStr} onChange={(e) => onNonTextFieldChange(e, 'typeStr')} name="itemType" />
+                    </div>
+                </div>
+
+                <div className="form-group row">
+                    <label className="col-sm-2 col-form-label">Status</label>
+                    <div className="col-sm-10">
+                        <DropDownList data={statusesProvider} defaultValue={itemForm.statusStr} onChange={(e) => onNonTextFieldChange(e, 'statusStr')} name="status" />
+                    </div>
+                </div>
+
+                <div className="form-group row">
+                    <label className="col-sm-2 col-form-label">Estimate</label>
+                    <div className="col-sm-10">
+
+                        <Slider buttons={true} step={1} defaultValue={itemForm.estimate} value={itemForm.estimate} min={1} max={20} onChange={(e) => onNonTextFieldChange(e, 'estimate')} name="estimate" style={{ width: 300 }} />
+
+                    </div>
+                </div>
+
+                <div className="form-group row">
+                    <label className="col-sm-2 col-form-label">Priority</label>
+                    <div className="col-sm-10">
+                        <DropDownList data={prioritiesProvider} itemRender={(li, props) => priorityRender(li, props)} defaultValue={itemForm.priorityStr} onChange={(e) => onNonTextFieldChange(e, 'priorityStr')} name="priority" />
+                    </div>
+                </div>
+
+                <div className="form-group row">
+                    <label className="col-sm-2 col-form-label">Assignee</label>
+
+                    <div className="col-sm-10">
+                        <img src={selectedAssignee!.avatar} className="li-avatar rounded" />
+                        <span>{itemForm.assigneeName}</span>
+
+                        <Button type="button" fillMode="outline" themeColor="secondary" onClick={() => assigneePickerOpen()}>Pick assignee</Button>
+                    </div>
+                </div>
+            </form>
+
+            <AssigneeListModal 
+                users={users} 
+                modalIsShowing={modalIsShowing} 
+                setModalIsShowing={setModalIsShowing} 
+                selectAssignee={selectAssignee} />
+
+
+        </React.Fragment>
+    );
+   
 }
