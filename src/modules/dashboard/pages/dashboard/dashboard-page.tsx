@@ -1,7 +1,7 @@
 import { cloneElement, useContext, useState } from "react";
 import { useQueries } from "react-query";
 import { Observable } from "rxjs";
-import { Typography } from "@progress/kendo-react-common";
+import "./dashboard-page.css";
 
 import {
   DashboardFilter,
@@ -79,24 +79,27 @@ export function DashboardPage() {
   }
 
   function userFilterOpen() {
-    users$.subscribe((users: PtUser[]) => {
-      if (users.length > 0) {
-        setUsers(users);
+    users$.subscribe((uList: PtUser[]) => {
+      if (uList.length > 0) {
+        setUsers(uList);
       }
     });
-
     userService.fetchUsers();
   }
+
 
   function filterItemRender(li: any, itemProps: any) {
     const userItem = itemProps.dataItem as PtUser;
     const renderedRow = (
-      <div className="row" style={{ marginLeft: 5 }}>
-        <img
-          className="li-avatar rounded mx-auto d-block"
-          src={userItem.avatar}
-        />
-        <span style={{ marginLeft: 5 }}>{userItem.fullName}</span>
+      <div className="row  align-items-center">
+
+        <div className="col-auto">
+            <img className="li-avatar rounded" src={userItem.avatar} alt="avatar" />
+        </div>
+        <div className="col-auto">
+          <span>{userItem.fullName}</span>
+        </div>
+
       </div>
     );
     return cloneElement(li, li.props, renderedRow);
@@ -111,78 +114,128 @@ export function DashboardPage() {
     }
   }
 
+  if (queryResult0.isLoading || queryResult1.isLoading) {
+    return <div>Loading...</div>;
+  }
+
   return (
-    <div className="dashboard">
-      <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
-        <div className="col-md order-md-first text-center text-md-left">
-          <div >
-            <Typography.h2 className="small text-uppercase text-muted mb-0">
-              Statistics
-            </Typography.h2>
-            {filter.dateStart && filter.dateEnd && (
-              <span>
-                {" "}
-                {formatDateEnUs(filter.dateStart)} -{" "}
-                {formatDateEnUs(filter.dateEnd)}
-              </span>
-            )}
-          </div>
-        </div>
-
-        <div className="btn-toolbar mb-2 mb-md-0" style={{ gap: 20 }}>
-          <ComboBox
-            data={users}
-            itemRender={filterItemRender}
-            placeholder={"Select Assignee..."}
-            textField="fullName"
-            dataItemKey="id"
-            onOpen={userFilterOpen}
-            onChange={userFilterValueChange}
-            style={{ width: 250 }}
-          />
-
-          <ButtonGroup>
-            <Button
-              type="button"
-              icon="calendar"
-              onClick={(e) => onMonthRangeTap(3)}
-            >
-              3 Months
-            </Button>
-            <Button
-              type="button"
-              icon="calendar"
-              onClick={(e) => onMonthRangeTap(6)}
-            >
-              6 Months
-            </Button>
-            <Button
-              type="button"
-              icon="calendar"
-              onClick={(e) => onMonthRangeTap(12)}
-            >
-              1 Year
-            </Button>
-          </ButtonGroup>
-        </div>
-      </div>
-
-      <div className="card">
-        <Typography.h3 className="card-header">Active Issues</Typography.h3>
-        <div className="card-block pt-2">
-          <ActiveIssuesComponent statusCounts={statusCounts} />
-          <div className="container">
-            <div className="row">
-              <div className="col-sm-12">
-                <Typography.h3>All issues</Typography.h3>
+    <div className="dashboard-page">
+      {/* Header / Filters */}
+      <div className="container">
+        <div className="row align-items-center justify-content-between">
+          <div className="col-auto">
+            <div className="Frame13 d-flex flex-column align-items-start gap-2">
+              <div
+                className="Label text-center"
+                style={{
+                  color: "#3D3D3D",
+                  fontSize: "40px",
+                  fontFamily: "Roboto",
+                  fontWeight: 500,
+                }}
+              >
+                Dashboard
               </div>
             </div>
           </div>
-          <div className="row">
-            <div className="col-sm-12">
-              {filteredIssues && <DashboardChart issuesAll={filteredIssues} />}
+
+          <div className="col-auto">
+            <div className="Tools d-flex gap-3">
+              <div className="btn-toolbar mb-2 mb-md-0">
+                <div className="btn-group mr-2">
+                  <ComboBox
+                    data={users}
+                    itemRender={filterItemRender}
+                    placeholder="User"
+                    textField="fullName"
+                    dataItemKey="id"
+                    onOpen={userFilterOpen}
+                    onChange={userFilterValueChange}
+                    style={{ width: 250 }}
+                  />
+                  <ButtonGroup>
+                    <Button
+                      type="button"
+                      icon="calendar"
+
+                      className="btn btn-sm btn-outline-secondary"
+                      onClick={() => onMonthRangeTap(3)}
+                    >
+                      3 Months
+                    </Button>
+                    <Button
+                      type="button"
+                      icon="calendar"
+          
+                      className="btn btn-sm btn-outline-secondary"
+                      onClick={() => onMonthRangeTap(6)}
+                    >
+                      6 Months
+                    </Button>
+                    <Button
+                      type="button"
+                      icon="calendar"
+         
+                      className="btn btn-sm btn-outline-secondary"
+                      onClick={() => onMonthRangeTap(12)}
+                    >
+                      1 Year
+                    </Button>
+                  </ButtonGroup>
+                </div>
+              </div>
             </div>
           </div>
+        </div>
+      </div> 
+
+      {/* Diagram and Statistics Section */}
+      <div className="DiagramAndStatistics">
+        {/* Active Issues */}
+        <div className="Statistics StatisticsBlock">
+          <ActiveIssuesComponent statusCounts={statusCounts} />
+        </div>
+
+        {/* Additional Statistics Section */}
+        <div className="frame36 stretch-height">
+          <div className="frame38">
+            {/* Left Statistics Block */}
+            <div className="Statistics left-stat-block">
+              <div className="Label inline-flex">
+                <div className="BaseInputLabel gap-6">
+                  <div className="statistics-heading">All Issues</div>
+                </div>
+              </div>
+              <div className="Label inline-flex">
+                <div className="BaseInputLabel gap-6">
+                  <div className="statistics-subheading">Active Issues</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Statistics Block */}
+            <div className="Statistics right-stat-block">
+              <div className="Label inline-flex">
+                <div className="BaseInputLabel gap-6">
+                  <div className="statistics-subheading">
+                    Highest: 100% on Oct 11, 2018
+                  </div>
+                </div>
+              </div>
+              <div className="Label inline-flex">
+                <div className="BaseInputLabel gap-6">
+                  <div className="statistics-subheading">
+                    Lowest: 20% on Oct 9, 2018
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Chart Section */}
+        <div className="frame36 chart-section">
+          {filteredIssues && <DashboardChart issuesAll={filteredIssues} />}
         </div>
       </div>
     </div>

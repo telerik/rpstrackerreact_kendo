@@ -4,7 +4,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 
 import { BacklogPage } from './modules/backlog/pages/backlog/backlog-page';
 import { DashboardPage } from './modules/dashboard/pages/dashboard/dashboard-page';
-import { MainMenu } from './shared/components/main-menu/main-menu';
+
 import { SideMenu } from './shared/components/side-menu/side-menu';
 import { DetailPage } from './modules/backlog/pages/detail/detail-page';
 
@@ -14,6 +14,8 @@ import { BacklogService } from './modules/backlog/services/backlog.service';
 import { DashboardRepository } from './modules/dashboard/repositories/dashboard.repository';
 import { DashboardService } from './modules/dashboard/services/dashboard.service';
 import { PtUserService } from './core/services/pt-user-service';
+import MainMenu from './shared/components/main-menu/main-menu';
+import AppBar from './shared/components/app-bar/app-bar';
 
 import '@progress/kendo-theme-bootstrap/dist/all.css';
 import './App.css';
@@ -39,14 +41,52 @@ function App() {
       <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <React.Fragment>
+        <div className="page">
+      <div
+        className="Backlog"
+        style={{
+          width: "100%",
+          flexDirection: "column",
+          justifyContent: "flex-start",
+          alignItems: "flex-start",
+          display: "inline-flex",
+        }}
+      >
+        <div className="container-fluid" style={{
+            background: "rgba(3.84, 86.84, 98.16, 0.06)",
+            boxShadow: "0px 6px 13px rgba(0, 0, 0, 0.12)",
+          }}><AppBar/></div>
+        
+
+        <div
+          className="Frame10"
+          style={{
+            width: "1440px",
+            justifyContent: "flex-start",
+            alignItems: "flex-start",
+            display: "inline-flex",
+          }}
+        >
           <MainMenu />
-          <div className="container-fluid">
-            <div className="row">
 
-              <SideMenu></SideMenu>
+          <div
+            className="Frame9"
+            style={{
+              flex: "1 1 0",
+              alignSelf: "stretch",
+              paddingBottom: "20px",
+              paddingLeft: "20px",
+              paddingRight: "20px",
+              flexDirection: "column",
+              justifyContent: "flex-start",
+              alignItems: "normal",
+              gap: "24px",
+              display: "inline-flex",
+            }}
+          >
 
-              <main role="main" className="col-md-9 ml-sm-auto col-lg-10 px-4">
-                <Routes>
+
+              <Routes>
                   <Route path="dashboard" element={
                     <PtDashboardServiceContext.Provider value={dashboardService}>
                       <DashboardPage/>
@@ -61,17 +101,31 @@ function App() {
                   } />
                   <Route path="backlog" element={<Navigate replace to="/backlog/open" />}/>
 
-                  <Route path="/detail/:id" element={<DetailPage/>} />
-
-                  <Route path="/detail/:id/:screen" element={
+                  <Route path="/detail/:id" element={
                     <PtBacklogServiceContext.Provider value={backlogService}>
-                        <DetailPage/>
+                      <DetailPage/>
+                    </PtBacklogServiceContext.Provider>
+                  } />
+                  <Route path="/detail/:id/tasks" element={
+                    <PtBacklogServiceContext.Provider value={backlogService}>
+                      <DetailPage/>
+                    </PtBacklogServiceContext.Provider>
+                  } />
+                  <Route path="/detail/:id/chitchat" element={
+                    <PtBacklogServiceContext.Provider value={backlogService}>
+                      <DetailPage/>
                     </PtBacklogServiceContext.Provider>
                   } />
                 </Routes>
-              </main>
-            </div>
+
+
           </div>
+        </div>
+      </div>
+    </div>
+
+
+
         </React.Fragment>
       </BrowserRouter>
       </QueryClientProvider>
