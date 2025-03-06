@@ -7,7 +7,6 @@ import {
   DashboardFilter,
   FilteredIssues,
 } from "../../repositories/dashboard.repository";
-import { formatDateEnUs } from "../../../../core/helpers/date-utils";
 import { ActiveIssuesComponent } from "../../components/active-issues/active-issues";
 import { StatusCounts } from "../../models";
 import { PtUser } from "../../../../core/models/domain";
@@ -120,22 +119,12 @@ export function DashboardPage() {
 
   return (
     <div className="dashboard-page">
-      {/* Header / Filters */}
+
       <div className="container">
         <div className="row align-items-center justify-content-between">
           <div className="col-auto">
-            <div className="Frame13 d-flex flex-column align-items-start gap-2">
-              <div
-                className="Label text-center"
-                style={{
-                  color: "#3D3D3D",
-                  fontSize: "40px",
-                  fontFamily: "Roboto",
-                  fontWeight: 500,
-                }}
-              >
-                Dashboard
-              </div>
+            <div className="frame13 d-flex flex-column align-items-start gap-2">
+            <div className="dashboard-title text-center">Dashboard</div>
             </div>
           </div>
 
@@ -233,7 +222,6 @@ export function DashboardPage() {
           </div>
         </div>
 
-        {/* Chart Section */}
         <div className="frame36 chart-section">
           {filteredIssues && <DashboardChart issuesAll={filteredIssues} />}
         </div>
