@@ -1,9 +1,8 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
-import { Typography } from "@progress/kendo-react-common";
-
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Observable } from "rxjs";
+
 import { PtItem, PtUser, PtTask } from "../../../../core/models/domain";
 import { DetailScreenType } from "../../../../shared/models/ui/types/detail-screens";
 import { PtItemFormComponent } from "../../components/item-form/pt-item-form";
@@ -12,15 +11,10 @@ import { PtNewTask } from "../../../../shared/models/dto/pt-new-task";
 import { PtTaskAllUpdate, PtTaskTitleUpdate } from "../../../../shared/models/dto/pt-task-update";
 import { PtItemChitchatComponent } from "../../components/item-chitchat/pt-item-chitchat";
 import { PtNewComment } from "../../../../shared/models/dto/pt-new-comment";
+import { PtBacklogServiceContext, PtStoreContext, PtUserServiceContext } from "../../../../App";
 
-import {
-  PtBacklogServiceContext,
-  PtStoreContext,
-  PtUserServiceContext,
-} from "../../../../App";
-
-import { TabStrip, TabStripTab } from "@progress/kendo-react-layout";
 import { PtItemScheduleComponent } from "../../components/item-schedule/pt-item-schedule";
+import { TabStrip, TabStripTab } from "@progress/kendo-react-layout";
 
 const queryTag = "item";
 
@@ -37,6 +31,7 @@ const screenPositionMap: { [key in DetailScreenType | number]: number | DetailSc
 };
 
 export function DetailPage() {
+
   const store = useContext(PtStoreContext);
   const backlogService = useContext(PtBacklogServiceContext);
   const userService = useContext(PtUserServiceContext);
@@ -49,13 +44,12 @@ export function DetailPage() {
     screen?: DetailScreenType;
   };
 
+  const location = useLocation();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
   const useItem = (...params: Parameters<typeof backlogService.getPtItem>) => {
-    return useQuery<PtItem, Error>(queryTag, () =>
-      backlogService.getPtItem(...params)
-    );
+      return useQuery<PtItem, Error>(queryTag, () => backlogService.getPtItem(...params));
   };
   const queryResult = useItem(parseInt(itemId));
   const item = queryResult.data;
@@ -63,6 +57,16 @@ export function DetailPage() {
   const [selectedDetailsScreen, setSelectedDetailsScreen] = useState<DetailScreenType>(
     screen ? screen : "form"
   );
+
+  useEffect(() => {
+    if (location.pathname.endsWith('/tasks')) {
+        setSelectedDetailsScreen('tasks');
+    } else if (location.pathname.endsWith('/chitchat')) {
+        setSelectedDetailsScreen('chitchat');
+    } else if (location.pathname.includes('/detail/') && !location.pathname.includes('/tasks') && !location.pathname.includes('/chitchat')) {
+        setSelectedDetailsScreen('form');
+    }
+}, [location.pathname]);
 
   const updateItemMutation = useMutation(async (itemToUpdate: PtItem) => {
     const updatedItem = await backlogService.updatePtItem(itemToUpdate);
@@ -79,26 +83,13 @@ export function DetailPage() {
     return updatedTask;
   });
 
-  // Separate mutation for title-only updates (used by PtItemTasksComponent)
   const updateTaskTitleMutation = useMutation(async (taskUpdate: PtTaskTitleUpdate) => {
-    const updatedTask = await backlogService.updatePtTask(
-      item!,
-      taskUpdate.task,
-      taskUpdate.task.completed,
-      taskUpdate.newTitle
-    );
+    const updatedTask = await backlogService.updatePtTask(item!, taskUpdate.task, taskUpdate.task.completed, taskUpdate.newTitle);
     return updatedTask;
   });
-
-  // Full update mutation with dates (used by PtItemScheduleComponent)
+  
   const updateTaskMutation = useMutation(async (taskUpdate: PtTaskAllUpdate) => {
-    const updatedTask = await backlogService.updatePtTask(
-      item!,
-      taskUpdate.task,
-      taskUpdate.task.completed,
-      taskUpdate.newTitle
-    );
-    
+    const updatedTask = await backlogService.updatePtTask(item!, taskUpdate.task, taskUpdate.task.completed, taskUpdate.newTitle);
     // Update task dates if they are provided
     if (taskUpdate.dateStart && taskUpdate.dateEnd) {
       updatedTask.dateStart = taskUpdate.dateStart;
@@ -117,6 +108,14 @@ export function DetailPage() {
     const createdComment = await backlogService.addNewPtComment(newCommentItem, item!);
     return createdComment;
   });
+
+  function onScreenSelected(screen: DetailScreenType) {
+    if (screen === 'form') {
+        navigate(`/detail/${itemId}`);
+    } else {
+        navigate(`/detail/${itemId}/${screen}`);
+    }
+  }
 
   function onTabSelect(e: any) {
     const newScreen = screenPositionMap[e.selected] as DetailScreenType;
@@ -138,7 +137,7 @@ export function DetailPage() {
     updateItemMutation.mutate(item, {
       onSuccess: (updatedItem) => {
         queryClient.setQueryData(queryTag, updatedItem);
-      },
+      }
     });
   }
 
@@ -156,7 +155,6 @@ export function DetailPage() {
 
   return (
     <div className="container" style={{ paddingBottom: "30px" }}>
-      {/* Top Section */}
       <div className="row align-items-center justify-content-between">
         <div className="col-auto">
           <div className="frame13 d-flex flex-column align-items-start gap-2">
