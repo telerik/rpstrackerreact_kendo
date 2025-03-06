@@ -63,9 +63,11 @@ export function DetailPage() {
   useEffect(() => {
     if (location.pathname.endsWith('/tasks')) {
         setSelectedDetailsScreen('tasks');
+    } else if (location.pathname.endsWith('/schedule')) {
+        setSelectedDetailsScreen('schedule');
     } else if (location.pathname.endsWith('/chitchat')) {
         setSelectedDetailsScreen('chitchat');
-    } else if (location.pathname.includes('/detail/') && !location.pathname.includes('/tasks') && !location.pathname.includes('/chitchat')) {
+    } else if (location.pathname.includes('/detail/') && !location.pathname.includes('/tasks') && !location.pathname.includes('/schedule') && !location.pathname.includes('/chitchat')) {
         setSelectedDetailsScreen('form');
     }
 }, [location.pathname]);
