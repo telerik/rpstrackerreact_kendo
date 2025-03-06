@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Typography } from "@progress/kendo-react-common";
 
 import "./backlog-page.css";
 
@@ -22,14 +21,10 @@ export function BacklogPage() {
   const navigate = useNavigate();
 
   const { preset } = useParams() as { preset: PresetType };
-  const [currentPreset, setCurrentPreset] = useState<PresetType>(
-    preset ? preset : "open"
-  );
+  const [currentPreset, setCurrentPreset] = useState<PresetType>(preset ? preset : 'open');
 
   const useItems = (...params: Parameters<typeof backlogService.getItems>) => {
-    return useQuery<PtItem[], Error>(getQueryKey(), () =>
-      backlogService.getItems(...params)
-    );
+    return useQuery<PtItem[], Error>(getQueryKey(), () => backlogService.getItems(...params));
   };
   const queryResult = useItems(currentPreset);
   const items = queryResult.data;
@@ -40,13 +35,10 @@ export function BacklogPage() {
 
   const addItemMutation = useMutation(async (newItem: PtNewItem) => {
     if (store.value.currentUser) {
-      const createdItem = await backlogService.addNewPtItem(
-        newItem,
-        store.value.currentUser
-      );
-      return createdItem;
+        const createdItem = await backlogService.addNewPtItem(newItem, store.value.currentUser);
+        return createdItem;
     }
-  });
+});
 
   useEffect(() => {
     navigate(`/backlog/${currentPreset}`);
@@ -64,9 +56,9 @@ export function BacklogPage() {
 
   function onNewItemSave(newItem: PtNewItem) {
     return addItemMutation.mutateAsync(newItem, {
-      onSuccess(createdItem) {
-        queryClient.invalidateQueries(getQueryKey());
-      },
+        onSuccess(createdItem, variables, context) {
+            queryClient.invalidateQueries(getQueryKey());
+        },
     });
   }
 
@@ -81,7 +73,6 @@ export function BacklogPage() {
   return (
     <React.Fragment>
       <div className="container">
-        {/* Top Section */}
         <div className="row align-items-center justify-content-between">
           <div className="col-auto">
             <div className="frame13 d-flex flex-column align-items-start gap-2">
@@ -92,10 +83,7 @@ export function BacklogPage() {
             <div className="Tools d-flex gap-3">
               <div className="btn-toolbar mb-2 mb-md-0">
                 <div className="btn-group me-2">
-                  <AppPresetFilter
-                    selectedPreset={currentPreset}
-                    onSelectPresetTap={onSelectPresetTap}
-                  />
+                <AppPresetFilter selectedPreset={currentPreset} onSelectPresetTap={onSelectPresetTap} />
                   <Button
                     type="button"
                     size="small"
@@ -112,17 +100,15 @@ export function BacklogPage() {
         </div>
       </div>
 
-      {/* Grid Section */}
       <div className="container" style={{ marginTop: "20px" }}>
         <BacklogGrid items={items} />
       </div>
 
-      {/* Add Modal */}
       <AddItemModal
         onNewItemSave={onNewItemSave}
         modalShowing={isAddModalShowing}
         setIsAddModalShowing={setIsAddModalShowing}
       />
-    </React.Fragment>
+        </React.Fragment >
   );
 }
