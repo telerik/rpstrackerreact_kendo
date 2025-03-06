@@ -1,7 +1,8 @@
 import { useState } from "react";
+import { EMPTY_STRING } from "../../../../core/helpers";
+
 import { Button } from '@progress/kendo-react-buttons';
 import { Input } from '@progress/kendo-react-inputs';
-import { EMPTY_STRING } from "../../../../core/helpers";
 
 export type TaskFormProps = {
     addTask: (text: string) => void;
@@ -30,13 +31,30 @@ export function NewTaskForm(props: TaskFormProps) {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <div className="form-row align-items-center">
-                <div className="col-sm-6">
-                    <Input value={newTaskTitle} onChange={onNewTaskTitleChanged} placeholder="Enter new task..." name="newTask"/>
-                </div>
-                <Button type="button" onClick={() => onAddTapped()} themeColor="primary" disabled={!newTaskTitle}>Add</Button>
-            </div>
+        <form
+            onSubmit={handleSubmit}
+            style={{
+                justifyContent: "center",
+                alignItems: "flex-start",
+                gap: "8px",
+                display: "inline-flex"
+            }}
+        >
+            <input
+                value={newTaskTitle}
+                onChange={onNewTaskTitleChanged}
+                placeholder="Enter new task..."
+                className="form-control pt-text-task-add"
+                name="newTask"
+            />
+            <button
+                type="button"
+                onClick={onAddTapped}
+                className="btn btn-primary"
+                disabled={!newTaskTitle}
+            >
+                Add
+            </button>
         </form>
     );
 }

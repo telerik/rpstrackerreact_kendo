@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Observable } from "rxjs";
-import { Input, Slider, TextArea } from '@progress/kendo-react-inputs';
-import { DropDownList, ListItemProps } from '@progress/kendo-react-dropdowns';
+
 import { PtItem, PtUser } from "../../../../core/models/domain";
 import { PtItemDetailsEditFormModel, ptItemToFormModel } from "../../../../shared/models/forms/pt-item-details-edit-form";
 import { ItemType, PT_ITEM_STATUSES, PT_ITEM_PRIORITIES } from "../../../../core/constants";
 import { AssigneeListModal } from "../assignee-list-modal/assignee-list-modal";
 import { getIndicatorClass } from "../../../../shared/helpers/priority-styling";
+
 import { Button } from "@progress/kendo-react-buttons";
+import { Input, Slider, TextArea } from '@progress/kendo-react-inputs';
+import { DropDownList, ListItemProps } from '@progress/kendo-react-dropdowns';
 
 interface PtItemFormComponentProps {
     item: PtItem;
@@ -17,9 +19,11 @@ interface PtItemFormComponentProps {
 }
 
 export function PtItemFormComponent(props: PtItemFormComponentProps) {
+
     const statusesProvider = PT_ITEM_STATUSES;
     const prioritiesProvider = PT_ITEM_PRIORITIES;
     const itemTypesProvider = ItemType.List.map((t) => t.PtItemType);
+
     const [itemForm, setItemForm] = useState(ptItemToFormModel(props.item));
     const [users, setUsers] = useState<PtUser[]>([]);
     const [modalIsShowing, setModalIsShowing] = useState(false);

@@ -1,7 +1,7 @@
-import { Button } from "@progress/kendo-react-buttons";
 import { useState } from "react";
 import { EMPTY_STRING } from "../../../../core/helpers";
 import { PtUser } from "../../../../core/models/domain";
+import { Button } from "@progress/kendo-react-buttons";
 
 export type CommentFormProps = {
     addComment: (text: string) => void;

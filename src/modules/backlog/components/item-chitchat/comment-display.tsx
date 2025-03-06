@@ -1,5 +1,5 @@
-import { Typography } from '@progress/kendo-react-common';
 import { PtComment } from "../../../../core/models/domain";
+import { Typography } from '@progress/kendo-react-common';
 
 export type PtCommentDisplayComponentProps = {
     comment: PtComment;
