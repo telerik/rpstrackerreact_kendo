@@ -5,7 +5,6 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { BacklogPage } from './modules/backlog/pages/backlog/backlog-page';
 import { DashboardPage } from './modules/dashboard/pages/dashboard/dashboard-page';
 
-import { SideMenu } from './shared/components/side-menu/side-menu';
 import { DetailPage } from './modules/backlog/pages/detail/detail-page';
 
 import { Store } from './core/state/app-store';
@@ -42,65 +41,27 @@ function App() {
       <BrowserRouter>
         <React.Fragment>
         <div className="page">
-      <div
-        className="Backlog"
-        style={{
-          width: "100%",
-          flexDirection: "column",
-          justifyContent: "flex-start",
-          alignItems: "flex-start",
-          display: "inline-flex",
-        }}
-      >
-        <div className="container-fluid" style={{
-            background: "rgba(3.84, 86.84, 98.16, 0.06)",
-            boxShadow: "0px 6px 13px rgba(0, 0, 0, 0.12)",
-          }}><AppBar/></div>
-        
-
-        <div
-          className="Frame10"
-          style={{
-            width: "1440px",
-            justifyContent: "flex-start",
-            alignItems: "flex-start",
-            display: "inline-flex",
-          }}
-        >
-          <MainMenu />
-
-          <div
-            className="Frame9"
-            style={{
-              flex: "1 1 0",
-              alignSelf: "stretch",
-              paddingBottom: "20px",
-              paddingLeft: "20px",
-              paddingRight: "20px",
-              flexDirection: "column",
-              justifyContent: "flex-start",
-              alignItems: "normal",
-              gap: "24px",
-              display: "inline-flex",
-            }}
-          >
-
-
-              <Routes>
+          <div className="backlog-container">
+            <div className="app-header">
+              <AppBar/>
+            </div>
+            
+            <div className="main-content-wrapper">
+              <MainMenu />
+              <div className="content-container">
+                <Routes>
                   <Route path="dashboard" element={
                     <PtDashboardServiceContext.Provider value={dashboardService}>
                       <DashboardPage/>
                     </PtDashboardServiceContext.Provider>
                   } />
                   <Route path="/" element={<Navigate replace to="/dashboard" />} />
-
                   <Route path="/backlog/:preset" element={
                     <PtBacklogServiceContext.Provider value={backlogService}>
                       <BacklogPage/>
                     </PtBacklogServiceContext.Provider>
                   } />
                   <Route path="backlog" element={<Navigate replace to="/backlog/open" />}/>
-
                   <Route path="/detail/:id" element={
                     <PtBacklogServiceContext.Provider value={backlogService}>
                       <DetailPage/>
@@ -111,21 +72,21 @@ function App() {
                       <DetailPage/>
                     </PtBacklogServiceContext.Provider>
                   } />
+                  <Route path="/detail/:id/schedule" element={
+                    <PtBacklogServiceContext.Provider value={backlogService}>
+                      <DetailPage/>
+                    </PtBacklogServiceContext.Provider>
+                  } />
                   <Route path="/detail/:id/chitchat" element={
                     <PtBacklogServiceContext.Provider value={backlogService}>
                       <DetailPage/>
                     </PtBacklogServiceContext.Provider>
                   } />
                 </Routes>
-
-
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-
-
-
         </React.Fragment>
       </BrowserRouter>
       </QueryClientProvider>
