@@ -1,14 +1,17 @@
 import { useState } from "react";
+
+import { ItemType } from "../../../../core/constants";
+import { EMPTY_STRING } from "../../../../core/helpers";
+import { PtItem } from "../../../../core/models/domain";
+import { PtNewItem } from "../../../../shared/models/dto/pt-new-item";
+
 import { Button } from '@progress/kendo-react-buttons';
 import { FormElement } from '@progress/kendo-react-form';
 import { Label } from '@progress/kendo-react-labels';
 import { Input, TextArea } from '@progress/kendo-react-inputs';
 import { DropDownList } from '@progress/kendo-react-dropdowns';
 import { Dialog, DialogActionsBar } from '@progress/kendo-react-dialogs';
-import { ItemType } from "../../../../core/constants";
-import { EMPTY_STRING } from "../../../../core/helpers";
-import { PtItem } from "../../../../core/models/domain";
-import { PtNewItem } from "../../../../shared/models/dto/pt-new-item";
+
 
 export type AddItemModalProps = {
     modalShowing: boolean;

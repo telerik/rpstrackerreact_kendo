@@ -1,5 +1,6 @@
-import { Dialog } from '@progress/kendo-react-dialogs';
+
 import { PtUser } from "../../../../core/models/domain";
+import { Dialog } from '@progress/kendo-react-dialogs';
 
 export type AssigneeListModalProps = {
     modalIsShowing: boolean;
