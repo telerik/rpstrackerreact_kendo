@@ -3,6 +3,8 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Observable } from "rxjs";
 
+import "./detail-page.css";
+
 import { PtItem, PtUser, PtTask } from "../../../../core/models/domain";
 import { DetailScreenType } from "../../../../shared/models/ui/types/detail-screens";
 import { PtItemFormComponent } from "../../components/item-form/pt-item-form";
