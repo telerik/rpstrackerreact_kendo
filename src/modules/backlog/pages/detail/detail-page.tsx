@@ -6,10 +6,10 @@ import { Typography } from "@progress/kendo-react-common";
 import { Observable } from "rxjs";
 import { PtItem, PtUser, PtTask } from "../../../../core/models/domain";
 import { DetailScreenType } from "../../../../shared/models/ui/types/detail-screens";
-import { PtItemDetailsComponent } from "../../components/item-details/pt-item-details";
+import { PtItemFormComponent } from "../../components/item-form/pt-item-form";
 import { PtItemTasksComponent } from "../../components/item-tasks/pt-item-tasks";
 import { PtNewTask } from "../../../../shared/models/dto/pt-new-task";
-import { PtTaskTitleUpdate } from "../../../../shared/models/dto/pt-task-update";
+import { PtTaskAllUpdate, PtTaskTitleUpdate } from "../../../../shared/models/dto/pt-task-update";
 import { PtItemChitchatComponent } from "../../components/item-chitchat/pt-item-chitchat";
 import { PtNewComment } from "../../../../shared/models/dto/pt-new-comment";
 
@@ -26,11 +26,11 @@ const queryTag = "item";
 
 const screenPositionMap: { [key in DetailScreenType | number]: number | DetailScreenType } =
 {
-  0: "details",
+  0: "form",
   1: "tasks",
-  2: "schedule",
+  2: "schedule", 
   3: "chitchat",
-  details: 0,
+  form: 0,
   tasks: 1,
   schedule: 2,
   chitchat: 3,
@@ -61,7 +61,7 @@ export function DetailPage() {
   const item = queryResult.data;
 
   const [selectedDetailsScreen, setSelectedDetailsScreen] = useState<DetailScreenType>(
-    screen ? screen : "details"
+    screen ? screen : "form"
   );
 
   const updateItemMutation = useMutation(async (itemToUpdate: PtItem) => {
@@ -79,13 +79,32 @@ export function DetailPage() {
     return updatedTask;
   });
 
-  const updateTaskMutation = useMutation(async (taskUpdate: PtTaskTitleUpdate) => {
+  // Separate mutation for title-only updates (used by PtItemTasksComponent)
+  const updateTaskTitleMutation = useMutation(async (taskUpdate: PtTaskTitleUpdate) => {
     const updatedTask = await backlogService.updatePtTask(
       item!,
       taskUpdate.task,
       taskUpdate.task.completed,
       taskUpdate.newTitle
     );
+    return updatedTask;
+  });
+
+  // Full update mutation with dates (used by PtItemScheduleComponent)
+  const updateTaskMutation = useMutation(async (taskUpdate: PtTaskAllUpdate) => {
+    const updatedTask = await backlogService.updatePtTask(
+      item!,
+      taskUpdate.task,
+      taskUpdate.task.completed,
+      taskUpdate.newTitle
+    );
+    
+    // Update task dates if they are provided
+    if (taskUpdate.dateStart && taskUpdate.dateEnd) {
+      updatedTask.dateStart = taskUpdate.dateStart;
+      updatedTask.dateEnd = taskUpdate.dateEnd;
+    }
+    
     return updatedTask;
   });
 
@@ -102,7 +121,13 @@ export function DetailPage() {
   function onTabSelect(e: any) {
     const newScreen = screenPositionMap[e.selected] as DetailScreenType;
     setSelectedDetailsScreen(newScreen);
-    navigate(`/detail/${itemId}/${newScreen}`);
+    
+    // Only navigate to a path with screen parameter if not the default "form" screen
+    if (newScreen !== "form") {
+      navigate(`/detail/${itemId}/${newScreen}`);
+    } else {
+      navigate(`/detail/${itemId}`);
+    }
   }
 
   function getSelectedTabNum() {
@@ -119,10 +144,6 @@ export function DetailPage() {
 
   function onUsersRequested() {
     userService.fetchUsers();
-  }
-
-  if (!screen) {
-    return <Navigate replace to={`/detail/${itemId}/details`} />;
   }
 
   if (queryResult.isLoading) {
@@ -149,8 +170,8 @@ export function DetailPage() {
       {/* TabStrip Section */}
       <div style={{ marginTop: "20px" }}>
         <TabStrip onSelect={onTabSelect} selected={getSelectedTabNum()}>
-          <TabStripTab title="Details">
-            <PtItemDetailsComponent
+          <TabStripTab title="Form">
+            <PtItemFormComponent
               item={item}
               users$={users$}
               usersRequested={onUsersRequested}
@@ -163,7 +184,7 @@ export function DetailPage() {
               addTaskMutation={addTaskMutation}
               deleteTaskMutation={deleteTaskMutation}
               toggleTaskCompletionMutation={toggleTaskCompletionMutation}
-              updateTaskMutation={updateTaskMutation}
+              updateTaskMutation={updateTaskTitleMutation}
             />
           </TabStripTab>
           <TabStripTab title="Schedule">
@@ -171,10 +192,10 @@ export function DetailPage() {
               tasks={item.tasks}
               addTaskMutation={addTaskMutation}
               deleteTaskMutation={deleteTaskMutation}
-              updateTaskMutation={updateTaskMutation}
+              updateTaskMutation={updateTaskTitleMutation}
             />
           </TabStripTab>
-          <TabStripTab title="Chitchat">
+          <TabStripTab title="Chit Chat">
             <PtItemChitchatComponent
               comments={item.comments}
               currentUser={currentUser!}
