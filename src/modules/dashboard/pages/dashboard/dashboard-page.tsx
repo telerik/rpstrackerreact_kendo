@@ -182,9 +182,10 @@ export function DashboardPage() {
       </div> 
 
       {/* Diagram and Statistics Section */}
+      <div className="container">
       <div className="DiagramAndStatistics">
         {/* Active Issues */}
-        <div className="Statistics StatisticsBlock">
+        <div className="StatisticsBlock">
           <ActiveIssuesComponent statusCounts={statusCounts} />
         </div>
 
@@ -229,6 +230,7 @@ export function DashboardPage() {
           {filteredIssues && <DashboardChart issuesAll={filteredIssues} />}
         </div>
       </div>
+    </div>
     </div>
   );
 }
