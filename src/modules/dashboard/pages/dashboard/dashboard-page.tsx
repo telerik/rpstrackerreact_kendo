@@ -31,6 +31,7 @@ export function DashboardPage() {
   const dashboardService = useContext(PtDashboardServiceContext);
 
   const [filter, setFilter] = useState<DashboardFilter>({});
+  const [selectedUser, setSelectedUser] = useState<PtUser | null>(null);
 
   const users$: Observable<PtUser[]> = store.select<PtUser[]>("users");
   const [users, setUsers] = useState<PtUser[]>([]);
@@ -107,8 +108,10 @@ export function DashboardPage() {
   function userFilterValueChange(e: ComboBoxChangeEvent) {
     const user = e.target.value;
     if (user) {
+      setSelectedUser(user);
       setFilter({ ...filter, userId: user.id });
     } else {
+      setSelectedUser(null);
       setFilter({ ...filter, userId: undefined });
     }
   }
@@ -134,6 +137,7 @@ export function DashboardPage() {
                 <div className="btn-group me-2">
                   <ComboBox
                     data={users}
+                    value={selectedUser}
                     itemRender={filterItemRender}
                     placeholder="User"
                     textField="fullName"
