@@ -158,53 +158,58 @@ export function DetailPage() {
   }
 
   return (
-    <div className="container" style={{ paddingBottom: "30px" }}>
-      <div className="row align-items-center justify-content-between">
-        <div className="col-auto">
-          <div className="frame13 d-flex flex-column align-items-start gap-2">
-            <div className="dashboard-title text-center">
-              <span className="k-icon k-i-edit"></span> {item.title}
-            </div>
+    <div className="detail-page page">
+
+      <div className="container">
+          <div className="row align-items-center justify-content-between">
+              <div className="col-auto">
+                  <div className="frame-details d-flex flex-column align-items-start gap-2">
+                      <div className="page-title">
+                        <span className="k-icon k-i-edit"></span> {item.title}
+                      </div>
+                  </div>
+              </div>
           </div>
-        </div>
       </div>
 
-      {/* TabStrip Section */}
-      <div style={{ marginTop: "20px" }}>
-        <TabStrip onSelect={onTabSelect} selected={getSelectedTabNum()}>
-          <TabStripTab title="Form">
-            <PtItemFormComponent
-              item={item}
-              users$={users$}
-              usersRequested={onUsersRequested}
-              itemSaved={onItemSaved}
-            />
-          </TabStripTab>
-          <TabStripTab title="Tasks">
-            <PtItemTasksComponent
-              tasks={item.tasks}
-              addTaskMutation={addTaskMutation}
-              deleteTaskMutation={deleteTaskMutation}
-              toggleTaskCompletionMutation={toggleTaskCompletionMutation}
-              updateTaskMutation={updateTaskTitleMutation}
-            />
-          </TabStripTab>
-          <TabStripTab title="Schedule">
-            <PtItemScheduleComponent
-              tasks={item.tasks}
-              addTaskMutation={addTaskMutation}
-              deleteTaskMutation={deleteTaskMutation}
-              updateTaskMutation={updateTaskTitleMutation}
-            />
-          </TabStripTab>
-          <TabStripTab title="Chit Chat">
-            <PtItemChitchatComponent
-              comments={item.comments}
-              currentUser={currentUser!}
-              addCommentMutation={addCommentMutation}
-            />
-          </TabStripTab>
-        </TabStrip>
+      <div className="container">
+        {/* TabStrip Section */}
+        <div style={{ marginTop: "20px" }}>
+          <TabStrip onSelect={onTabSelect} selected={getSelectedTabNum()}>
+            <TabStripTab title="Form">
+              <PtItemFormComponent
+                item={item}
+                users$={users$}
+                usersRequested={onUsersRequested}
+                itemSaved={onItemSaved}
+              />
+            </TabStripTab>
+            <TabStripTab title="Tasks">
+              <PtItemTasksComponent
+                tasks={item.tasks}
+                addTaskMutation={addTaskMutation}
+                deleteTaskMutation={deleteTaskMutation}
+                toggleTaskCompletionMutation={toggleTaskCompletionMutation}
+                updateTaskMutation={updateTaskTitleMutation}
+              />
+            </TabStripTab>
+            <TabStripTab title="Schedule">
+              <PtItemScheduleComponent
+                tasks={item.tasks}
+                addTaskMutation={addTaskMutation}
+                deleteTaskMutation={deleteTaskMutation}
+                updateTaskMutation={updateTaskTitleMutation}
+              />
+            </TabStripTab>
+            <TabStripTab title="Chit Chat">
+              <PtItemChitchatComponent
+                comments={item.comments}
+                currentUser={currentUser!}
+                addCommentMutation={addCommentMutation}
+              />
+            </TabStripTab>
+          </TabStrip>
+        </div>
       </div>
     </div>
   );

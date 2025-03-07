@@ -71,38 +71,38 @@ export function BacklogPage() {
   }
 
   return (
-    <React.Fragment>
-      <div className="container">
-        <div className="row align-items-center justify-content-between">
-          <div className="col-auto">
-            <div className="frame13 d-flex flex-column align-items-start gap-2">
-              <div className="dashboard-title text-center">Backlog</div>
+      <div className="backlog-page page">
+        <div className="container">
+          <div className="row align-items-center justify-content-between">
+            <div className="col-auto">
+              <div className="frame13 d-flex flex-column align-items-start gap-2">
+                <div className="page-title">Backlog</div>
+              </div>
             </div>
-          </div>
-          <div className="col-auto">
-            <div className="Tools d-flex gap-3">
-              <div className="btn-toolbar mb-2 mb-md-0">
-                <div className="btn-group me-2">
-                <AppPresetFilter selectedPreset={currentPreset} onSelectPresetTap={onSelectPresetTap} />
-                  <Button type="button" size="small" fillMode="outline" themeColor="secondary" onClick={toggleModal}>
-                    Add
-                  </Button>
+            <div className="col-auto">
+              <div className="Tools d-flex gap-3">
+                <div className="btn-toolbar mb-2 mb-md-0">
+                  <div className="btn-group me-2">
+                  <AppPresetFilter selectedPreset={currentPreset} onSelectPresetTap={onSelectPresetTap} />
+                    <Button type="button" size="small" fillMode="outline" themeColor="secondary" onClick={toggleModal}>
+                      Add
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div className="container" style={{ marginTop: "20px" }}>
-        <BacklogGrid items={items} />
-      </div>
+        <div className="container" style={{ marginTop: "20px" }}>
+          <BacklogGrid items={items} />
+        </div>
 
-      <AddItemModal
-        onNewItemSave={onNewItemSave}
-        modalShowing={isAddModalShowing}
-        setIsAddModalShowing={setIsAddModalShowing}
-      />
-        </React.Fragment >
+        <AddItemModal
+          onNewItemSave={onNewItemSave}
+          modalShowing={isAddModalShowing}
+          setIsAddModalShowing={setIsAddModalShowing}
+        />
+      </div>
   );
 }
