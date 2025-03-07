@@ -201,7 +201,7 @@ export function DetailPage() {
                 updateTaskMutation={updateTaskTitleMutation}
               />
             </TabStripTab>
-            <TabStripTab title="Chit Chat">
+            <TabStripTab title="Chitchat">
               <PtItemChitchatComponent
                 comments={item.comments}
                 currentUser={currentUser!}

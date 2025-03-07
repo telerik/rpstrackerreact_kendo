@@ -104,7 +104,6 @@ export function PtTaskDisplayComponent(props: PtTaskDisplayComponentProps) {
                             <div
                                 style={{
                                     width: "16px",
-                                    height: "16px",
                                     position: "relative",
                                     flexDirection: "column",
                                     justifyContent: "flex-start",

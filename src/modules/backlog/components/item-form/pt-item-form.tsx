@@ -113,54 +113,60 @@ export function PtItemFormComponent(props: PtItemFormComponentProps) {
     return (
         <React.Fragment>
             <form>
-                <div className="form-group row">
+                <div className="form-group row mb-3">
                     <label className="col-sm-2 col-form-label">Title</label>
-                    <div className="col-sm-10">
-                        <Input defaultValue={itemForm.title} onBlur={() => onBlurTextField()} onChange={(e) => onFieldChange(e, 'title')} name="title" style={{ width: '60%' }} />
+                    <div className="col-sm-6">
+                        <Input defaultValue={itemForm.title} onBlur={() => onBlurTextField()} onChange={(e) => onFieldChange(e, 'title')} name="title" />
                     </div>
                 </div>
 
-                <div className="form-group row">
+                <div className="form-group row mb-3">
                     <label className="col-sm-2 col-form-label">Description</label>
-                    <div className="col-sm-10">
-                        <TextArea defaultValue={itemForm.description} onBlur={() => onBlurTextField()} onChange={(e) => onFieldChange(e, 'description')} name="description" style={{ width: '60%', height: 100 }} />
+                    <div className="col-sm-6">
+                        <TextArea defaultValue={itemForm.description} onBlur={() => onBlurTextField()} onChange={(e) => onFieldChange(e, 'description')} name="description" style={{ height: 100 }} />
                     </div>
                 </div>
 
-                <div className="form-group row">
+                <div className="form-group row mb-3">
+                    <label className="col-sm-2 col-form-label">Estimate</label>
+                    <div className="col-sm-6">
+                        <Slider buttons={true} step={1} defaultValue={itemForm.estimate} value={itemForm.estimate} min={1} max={20} onChange={(e) => onNonTextFieldChange(e, 'estimate')} name="estimate" style={{ width: '100%' }} />
+                    </div>
+                </div>
+
+                <div className="form-group row mb-3">
                     <label className="col-sm-2 col-form-label">Item Type</label>
-                    <div className="col-sm-10">
+                    <div className="col-sm-6">
                         <DropDownList data={itemTypesProvider} itemRender={itemTypeRender} defaultValue={itemForm.typeStr} onChange={(e) => onNonTextFieldChange(e, 'typeStr')} name="itemType" />
                     </div>
                 </div>
 
-                <div className="form-group row">
+                <div className="form-group row mb-3">
                     <label className="col-sm-2 col-form-label">Status</label>
-                    <div className="col-sm-10">
+                    <div className="col-sm-6">
                         <DropDownList data={statusesProvider} defaultValue={itemForm.statusStr} onChange={(e) => onNonTextFieldChange(e, 'statusStr')} name="status" />
                     </div>
                 </div>
 
-                <div className="form-group row">
-                    <label className="col-sm-2 col-form-label">Estimate</label>
-                    <div className="col-sm-10">
-                        <Slider buttons={true} step={1} defaultValue={itemForm.estimate} value={itemForm.estimate} min={1} max={20} onChange={(e) => onNonTextFieldChange(e, 'estimate')} name="estimate" style={{ width: 300 }} />
-                    </div>
-                </div>
-
-                <div className="form-group row">
+                <div className="form-group row mb-3">
                     <label className="col-sm-2 col-form-label">Priority</label>
-                    <div className="col-sm-10">
+                    <div className="col-sm-6">
                         <DropDownList data={prioritiesProvider} itemRender={(li, props) => priorityRender(li, props)} defaultValue={itemForm.priorityStr} onChange={(e) => onNonTextFieldChange(e, 'priorityStr')} name="priority" />
                     </div>
                 </div>
 
-                <div className="form-group row">
+                <div className="form-group row mb-3">
                     <label className="col-sm-2 col-form-label">Assignee</label>
-                    <div className="col-sm-10">
-                        <img src={selectedAssignee!.avatar} className="li-avatar rounded" />
-                        <span>{itemForm.assigneeName}</span>
-                        <Button type="button" fillMode="outline" themeColor="secondary" onClick={() => assigneePickerOpen()}>Pick assignee</Button>
+                    <div className="col-sm-6">
+                        <div className="row">
+                            <div className="col-sm-8">
+                                <img src={selectedAssignee!.avatar} className="li-avatar rounded" style={{ marginRight: '10px' }}  />
+                                <span>{itemForm.assigneeName}</span>
+                            </div>
+                            <div className="col-sm-4">
+                                <Button type="button" fillMode="outline" themeColor="secondary" onClick={() => assigneePickerOpen()}>Pick assignee</Button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </form>
