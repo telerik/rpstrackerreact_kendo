@@ -1,8 +1,9 @@
-import { Chart, ChartCategoryAxis, ChartCategoryAxisItem, ChartSeries, ChartSeriesDefaults, ChartSeriesItem, ChartTitle } from "@progress/kendo-react-charts";
-import { FilteredIssues } from "../../repositories/dashboard.repository";
-
-import 'hammerjs';
 import { useMemo } from "react";
+
+
+import { FilteredIssues } from "../../repositories/dashboard.repository";
+import { Chart, ChartCategoryAxis, ChartCategoryAxisItem, ChartSeries, ChartSeriesDefaults, ChartSeriesItem, ChartTitle } from "@progress/kendo-react-charts";
+
 
 export type DashboardChartProps = {
     issuesAll: FilteredIssues;
