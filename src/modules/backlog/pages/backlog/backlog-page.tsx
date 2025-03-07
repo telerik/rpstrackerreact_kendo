@@ -82,8 +82,8 @@ export function BacklogPage() {
             <div className="col-auto">
               <div className="Tools d-flex gap-3">
                 <div className="btn-toolbar mb-2 mb-md-0">
-                  <div className="btn-group me-2">
                   <AppPresetFilter selectedPreset={currentPreset} onSelectPresetTap={onSelectPresetTap} />
+                  <div className="btn-group me-2">
                     <Button type="button" size="small" fillMode="outline" themeColor="secondary" onClick={toggleModal}>
                       Add
                     </Button>

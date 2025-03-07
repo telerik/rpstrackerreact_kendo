@@ -131,7 +131,7 @@ export function DashboardPage() {
           <div className="col-auto">
             <div className="Tools d-flex gap-3">
               <div className="btn-toolbar mb-2 mb-md-0">
-                <div className="btn-group mr-2">
+                <div className="btn-group me-2">
                   <ComboBox
                     data={users}
                     itemRender={filterItemRender}
@@ -142,6 +142,9 @@ export function DashboardPage() {
                     onChange={userFilterValueChange}
                     style={{ width: 250 }}
                   />
+                </div>
+                <div className="btn-group me-2">
+
                   <ButtonGroup>
                     <Button
                       type="button"
