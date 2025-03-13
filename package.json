@@ -1,7 +1,14 @@
 {
-  "name": "rpstrackerreact",
-  "version": "0.1.0",
+  "name": "rpstrackerreact_kendo_vite",
   "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
   "dependencies": {
     "@progress/kendo-data-query": "^1.7.1",
     "@progress/kendo-date-math": "^1.5.14",
@@ -39,27 +46,20 @@
     "rxjs": "6.6.7"
   },
   "devDependencies": {
+    "@eslint/js": "^9.21.0",
     "@types/jest": "26.0.20",
     "@types/node": "22.13.2",
-    "@types/react": "19.0.8",
-    "@types/react-dom": "19.0.3",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
     "@types/react-router-dom": "5.3.3",
+    "@vitejs/plugin-react": "^4.3.4",
+    "eslint": "^9.21.0",
+    "eslint-plugin-react-hooks": "^5.1.0",
+    "eslint-plugin-react-refresh": "^0.4.19",
     "@types/reactstrap": "8.7.2",
-    "typescript": "5.7.3"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ]
+    "globals": "^15.15.0",
+    "typescript": "~5.7.2",
+    "typescript-eslint": "^8.24.1",
+    "vite": "^6.2.0"
+  }
 }
