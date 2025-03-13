@@ -1,5 +1,5 @@
-import { cloneElement, useContext, useState } from "react";
-import { useQueries } from "react-query";
+import { cloneElement, useContext, useState, useEffect } from "react";
+import { useQueries } from "@tanstack/react-query";
 import { Observable } from "rxjs";
 import "./dashboard-page.css";
 
@@ -36,12 +36,21 @@ export function DashboardPage() {
   const users$: Observable<PtUser[]> = store.select<PtUser[]>("users");
   const [users, setUsers] = useState<PtUser[]>([]);
 
+  useEffect(() => {
+    const subscription = users$.subscribe(users => {
+      setUsers(users);
+    });
+    
+    return () => subscription.unsubscribe();
+  }, [users$]);
+
   function getQueryKey(keybase: string) {
     return [keybase, filter];
   }
 
   const useDashboardData = (filter: DashboardFilter) => {
-    return useQueries<[StatusCounts, FilteredIssues]>([
+    return useQueries<[StatusCounts, FilteredIssues]>({
+      queries: [
       {
         queryKey: getQueryKey("items"),
         queryFn: () => dashboardService.getStatusCounts(filter),
@@ -50,13 +59,14 @@ export function DashboardPage() {
         queryKey: getQueryKey("issues"),
         queryFn: () => dashboardService.getFilteredIssues(filter),
       },
-    ]);
+      ],
+    });
   };
 
   const queryResults = useDashboardData(filter);
   const queryResult0 = queryResults[0];
   const queryResult1 = queryResults[1];
-  const statusCounts = queryResult0.data as StatusCounts;
+  const statusCounts = queryResult0?.data as StatusCounts | undefined;
   const filteredIssues = queryResult1.data as FilteredIssues;
 
   function onMonthRangeTap(months: number) {
@@ -118,6 +128,10 @@ export function DashboardPage() {
 
   if (queryResult0.isLoading || queryResult1.isLoading) {
     return <div>Loading...</div>;
+  }
+
+  if (!statusCounts) {
+    return <div>No data</div>;
   }
 
   return (
