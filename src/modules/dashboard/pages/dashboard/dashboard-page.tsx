@@ -126,14 +126,6 @@ export function DashboardPage() {
     }
   }
 
-  if (queryResult0.isLoading || queryResult1.isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (!statusCounts) {
-    return <div>No data</div>;
-  }
-
   return (
     <div className="dashboard-page page">
 
