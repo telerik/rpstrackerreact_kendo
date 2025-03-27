@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useEffect, useState } from "react";
 
 
 import { FilteredIssues } from "../../repositories/dashboard.repository";
@@ -9,14 +9,37 @@ export type DashboardChartProps = {
     issuesAll: FilteredIssues;
 };
 
+type ChartRefreshHandler = (
+    chartOptions: Record<string, unknown>,
+    themeOptions: Record<string, unknown>,
+    chartInstance: {
+      setOptions: (options: unknown, theme: unknown) => void;
+    }
+  ) => void;
+  
+
 
 export function DashboardChart(props: DashboardChartProps) {
+    const [shouldRefreshChart, setShouldRefreshChart] = useState(true);
 
     function initCategories() {
         console.log('initCategories');
         const cats = props.issuesAll.categories ? props.issuesAll.categories.map(c => new Date(c)) : [];
         return cats;
     }
+
+
+    useEffect(() => {
+        setShouldRefreshChart(true);
+    }, [props.issuesAll]);
+
+    const handleChartRefresh: ChartRefreshHandler = (options, theme, chart) => {
+        if (shouldRefreshChart) {
+          chart.setOptions(options, theme);
+          setShouldRefreshChart(false);
+        }
+      };
+      
 
     function initItemsOpenedByMonth() {
         const itemsOpenByMonth: number[] = [];
@@ -48,7 +71,7 @@ export function DashboardChart(props: DashboardChartProps) {
 
     return (
 
-        <Chart transitions={false}>
+        <Chart onRefresh={handleChartRefresh}>
             <ChartTitle text="Active Issues" />
 
             <ChartSeriesDefaults type="column" stack={true} gap={0.06} />
