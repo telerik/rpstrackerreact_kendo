@@ -18,15 +18,16 @@ export type PtItemScheduleComponentProps = {
 export function PtItemScheduleComponent(props: PtItemScheduleComponentProps) {
 
     const [events, setEvents] = useState<SchedulerEvent[]>(validEventsFromTasks(props.tasks));
-    const displayDate = new Date(Math.min.apply(null, events.map((e) => new Date(e.start).valueOf())));
+    const initialDate = new Date(Math.min.apply(null, events.map((e) => new Date(e.start).valueOf())));
+    const [currentDate, setCurrentDate] = useState(initialDate);
     const startTime = '07:00';
 
     const addTask = (schedEvent: SchedulerEvent) => {
         const newTask: PtNewTask = {
-                title: schedEvent.title,
-                completed: false,
-                dateStart: schedEvent.start,
-                dateEnd: schedEvent.end
+            title: schedEvent.title,
+            completed: false,
+            dateStart: schedEvent.start,
+            dateEnd: schedEvent.end
         };
         props.addTaskMutation.mutate(newTask, {
             onSuccess(createdTask) {
@@ -45,7 +46,6 @@ export function PtItemScheduleComponent(props: PtItemScheduleComponentProps) {
             dateStart: schedEvent.start,
             dateEnd: schedEvent.end,
         };
-        
         props.updateTaskMutation.mutate(taskUpdate, {
             onSuccess(updatedTask) {
                 const newTaskEntries = [...props.tasks];
@@ -67,14 +67,13 @@ export function PtItemScheduleComponent(props: PtItemScheduleComponentProps) {
                 }
             },
         });
-
     };
 
     const handleDataChange = ({
         created,
         updated,
         deleted,
-      }: SchedulerDataChangeEvent) => {
+    }: SchedulerDataChangeEvent) => {
         created.forEach((schedEvent: SchedulerEvent) => {
             addTask(schedEvent);
         });
@@ -86,24 +85,28 @@ export function PtItemScheduleComponent(props: PtItemScheduleComponentProps) {
         deleted.forEach((schedEvent: SchedulerEvent) => {
             removeTask(schedEvent);
         });
-      };
+    }
+
+    const handleDateChange = (e: { value: Date }) => {
+        setCurrentDate(e.value);
+    }
 
     return (
         <div>
-            <Scheduler 
-                data={events} 
-                date={displayDate}
+            <Scheduler
+                data={events}
+                date={currentDate}
+                onDateChange={handleDateChange}
                 editable={true}
                 onDataChange={handleDataChange}
-                style={{ height: 600 }}>
+                style={{ height: 600 }}
+            >
                 <DayView startTime={startTime} />
                 <WeekView startTime={startTime} />
                 <MonthView />
                 <TimelineView />
                 <AgendaView />
-
             </Scheduler>
         </div>
     );
-    
 }
