@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { PtTask } from "../../../../core/models/domain";
 
 import { PtTaskAllUpdate, PtTaskTitleUpdate } from "../../../../shared/models/dto/pt-task-update";
 import { PtNewTask } from "../../../../shared/models/dto/pt-new-task";
-import { UseMutationResult } from "react-query";
-import { AgendaView, DayView, MonthView, Scheduler, SchedulerDataChangeEvent, TimelineView, WeekView } from "@progress/kendo-react-scheduler";
+import { UseMutationResult } from "@tanstack/react-query";
+import { AgendaView, DayView, MonthView, Scheduler, SchedulerDataChangeEvent, SchedulerDateChangeEvent, TimelineView, WeekView } from "@progress/kendo-react-scheduler";
 
 import { SchedulerEvent, validEventsFromTasks } from "./scheduler-event.model";
 
@@ -20,6 +20,8 @@ export function PtItemScheduleComponent(props: PtItemScheduleComponentProps) {
     const [events, setEvents] = useState<SchedulerEvent[]>(validEventsFromTasks(props.tasks));
     const displayDate = new Date(Math.min.apply(null, events.map((e) => new Date(e.start).valueOf())));
     const startTime = '07:00';
+
+    const [date, setDate] = useState(displayDate);
 
     const addTask = (schedEvent: SchedulerEvent) => {
         const newTask: PtNewTask = {
@@ -86,15 +88,23 @@ export function PtItemScheduleComponent(props: PtItemScheduleComponentProps) {
         deleted.forEach((schedEvent: SchedulerEvent) => {
             removeTask(schedEvent);
         });
-      };
+    };
+
+    const handleDateChange = useCallback(
+        (event: SchedulerDateChangeEvent) => {
+            setDate(event.value);
+        },
+        [setDate]
+    );
 
     return (
         <div>
             <Scheduler 
                 data={events} 
-                date={displayDate}
+                date={date}
                 editable={true}
                 onDataChange={handleDataChange}
+                onDateChange={handleDateChange}
                 style={{ height: 600 }}>
                 <DayView startTime={startTime} />
                 <WeekView startTime={startTime} />
