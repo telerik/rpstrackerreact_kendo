@@ -2,6 +2,7 @@ import { useState } from "react";
 import { EMPTY_STRING } from "../../../../core/helpers";
 import { PtUser } from "../../../../core/models/domain";
 import { Button } from "@progress/kendo-react-buttons";
+import './pt-item-chitchat.css';
 
 export type CommentFormProps = {
     addComment: (text: string) => void;
@@ -31,17 +32,28 @@ export function NewCommentForm(props: CommentFormProps) {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <div className="form-row align-items-center">
-
-                <img src={props.currentUser.avatar} className="mr-3 li-avatar rounded" />
-
-                <div className="col-sm-6">
-                    <textarea value={newCommentText} onChange={onNewCommentChanged} placeholder="Enter new comment..." className="form-control pt-text-comment-add"
-                        name="newComment"></textarea>
-                </div>
-                <Button type="button" onClick={onAddTapped} themeColor="primary" disabled={!newCommentText}>Add</Button>
+        <form onSubmit={handleSubmit} className="new-comment-form">
+            <div className="comment-input-container">
+                <img src={props.currentUser.avatar} className="li-avatar rounded" alt="User avatar" />
+                <textarea 
+                    value={newCommentText} 
+                    onChange={onNewCommentChanged} 
+                    placeholder="Placeholder" 
+                    className="comment-textarea"
+                    name="newComment"
+                />
             </div>
-        </form >
+            <div className="comment-button-container">
+                <Button 
+                    type="button" 
+                    onClick={onAddTapped} 
+                    themeColor="primary" 
+                    disabled={!newCommentText}
+                    className="add-comment-btn"
+                >
+                    Add Comment
+                </Button>
+            </div>
+        </form>
     );
 }

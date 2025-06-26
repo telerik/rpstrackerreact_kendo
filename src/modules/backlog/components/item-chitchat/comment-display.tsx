@@ -11,11 +11,13 @@ export function PtCommentDisplayComponent(props: PtCommentDisplayComponentProps)
     const dateStr = comment.dateCreated.toDateString();
 
     return (
-        <li key={comment.id} className="media chitchat-item">
-            <img src={comment.user!.avatar} className="mr-3 li-avatar rounded" />
-            <div className="media-body">
-                <Typography.h6 className="mt-0 mb-1"><span>{comment.user!.fullName}</span><span className="li-date">{dateStr}</span></Typography.h6>
-                <span className="chitchat-text ">{comment.title}</span>
+        <li className="chitchat-item">
+            <div className="comment-item-container">
+                <img src={comment.user!.avatar} className="li-avatar rounded" alt="User avatar" />
+                <div className="media-body">
+                    <Typography.h6 className="mt-0 mb-1"><span>{comment.user!.fullName}</span><span className="comment-date">{dateStr}</span></Typography.h6>
+                    <span className="chitchat-text">{comment.title}</span>
+                </div>
             </div>
         </li>
     );
